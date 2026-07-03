@@ -1,4 +1,4 @@
-# MAIN-APP: Financial Market Forecasting Engine
+# fininteger: Financial Market Forecasting Engine
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/Framework-FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
@@ -237,7 +237,7 @@ Response:
 ```json
 {
   "status": "ok",
-  "app": "MAIN-APP",
+  "app": "fininteger",
   "version": "1.0.0",
   "symbols_available": 20
 }
