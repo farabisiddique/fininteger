@@ -5,13 +5,15 @@ Replaces Django's manage.py runserver.
 
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from config import APP_NAME, APP_VERSION, DEBUG, LOG_LEVEL, ALLOWED_HOSTS
-from database import init_db
+from fastapi.staticfiles import StaticFiles
+from config import APP_NAME, APP_VERSION, DEBUG, LOG_LEVEL
+from database import init_db, SessionLocal
 from routes import api, pages
 from forecaster.ml_engine import SYMBOL_MAP
-from models import Instrument
+from init_db import seed_instruments
 
 # Configure logging
 logging.basicConfig(
@@ -27,6 +29,10 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info(f"Starting {APP_NAME} v{APP_VERSION}")
     init_db()
+    with SessionLocal() as db:
+        added = seed_instruments(db)
+        if added:
+            logger.info(f"Seeded {added} instruments")
     logger.info("Database initialized")
     yield
     # Shutdown
@@ -49,6 +55,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Static files (brand images live in static/images/)
+app.mount("/static", StaticFiles(directory=Path(__file__).resolve().parent / "static"), name="static")
 
 # Include routers
 app.include_router(api.router)

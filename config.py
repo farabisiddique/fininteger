@@ -13,15 +13,17 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent
 
 # Environment variables
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
 # Database
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./forecast.db")
 
 # Cache settings (in seconds)
 FORECAST_CACHE_TTL = 600
+
+# User tour / disclaimer: "1" shows it to ALL users on every visit (testing),
+# "0" (default) shows it only to first-time visitors (tracked in localStorage)
+SHOW_TOUR_TO_ALL = os.getenv("SHOW_TOUR_TO_ALL", "0") == "1"
 
 # Logging
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")

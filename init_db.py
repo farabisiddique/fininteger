@@ -31,21 +31,17 @@ INSTRUMENTS = [
 ]
 
 
-def main():
-    print("Initializing database...")
-    init_db()
-    print("Database tables created.")
-    
-    db = SessionLocal()
-    
-    # Clear existing instruments
-    db.query(Instrument).delete()
-    db.commit()
-    
-    # Add instruments
-    print(f"Adding {len(INSTRUMENTS)} instruments...")
+def seed_instruments(db, force: bool = False) -> int:
+    """Insert the instrument seed data. Skips if the table already has rows
+    unless force=True (which wipes and re-inserts). Returns rows added."""
+    if force:
+        db.query(Instrument).delete()
+        db.commit()
+    elif db.query(Instrument).first() is not None:
+        return 0
+
     for inst in INSTRUMENTS:
-        instrument = Instrument(
+        db.add(Instrument(
             id=inst["id"],
             name=inst["name"],
             category=inst["cat"],
@@ -54,10 +50,19 @@ def main():
             volume=inst["vol"],
             market_cap=inst["mcap"],
             icon=inst["icon"]
-        )
-        db.add(instrument)
-    
+        ))
     db.commit()
+    return len(INSTRUMENTS)
+
+
+def main():
+    print("Initializing database...")
+    init_db()
+    print("Database tables created.")
+
+    db = SessionLocal()
+    print(f"Adding {len(INSTRUMENTS)} instruments...")
+    seed_instruments(db, force=True)
     db.close()
     print("✓ Database initialized successfully!")
 

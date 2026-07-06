@@ -1,3 +1,13 @@
+# Python
 __pycache__/
-__pycache__/*
+*.pyc
+
+# Environment / secrets
 .env
+venv/
+
+# SQLite database (recreated + seeded automatically on startup)
+*.db
+
+# Claude Code local settings
+.claude/settings.local.json

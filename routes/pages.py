@@ -1,37 +1,23 @@
 """
-Page routes for serving HTML templates.
+Page routes for serving HTML templates via Jinja2.
+Instrument data comes from the SQLite `instruments` table (seeded by init_db.py).
 """
 
-from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
 import json
 from pathlib import Path
 
+from fastapi import APIRouter, Depends, Request
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+
+from config import SHOW_TOUR_TO_ALL
+from database import get_db
+from models import Instrument
+
 router = APIRouter(tags=["pages"])
 
-# Initialize instrument data for templates
-INSTRUMENTS = [
-    {"id": "BTC",    "name": "Bitcoin",        "cat": "crypto",      "price": 67420.50, "change": 2.34,  "vol": "38.2B", "mcap": "1.32T", "icon": "₿"},
-    {"id": "ETH",    "name": "Ethereum",        "cat": "crypto",      "price": 3842.10,  "change": -1.12, "vol": "18.7B", "mcap": "462B",  "icon": "Ξ"},
-    {"id": "SOL",    "name": "Solana",           "cat": "crypto",      "price": 182.45,   "change": 5.67,  "vol": "4.1B",  "mcap": "85B",   "icon": "◎"},
-    {"id": "BNB",    "name": "BNB",              "cat": "crypto",      "price": 598.30,   "change": 0.88,  "vol": "1.9B",  "mcap": "92B",   "icon": "B"},
-    {"id": "XRP",    "name": "Ripple",           "cat": "crypto",      "price": 0.6210,   "change": -0.43, "vol": "1.2B",  "mcap": "34B",   "icon": "✕"},
-    {"id": "AAPL",   "name": "Apple Inc.",       "cat": "stocks",      "price": 228.35,   "change": 1.45,  "vol": "52M",   "mcap": "3.52T", "icon": "A"},
-    {"id": "NVDA",   "name": "NVIDIA Corp.",     "cat": "stocks",      "price": 875.20,   "change": 3.21,  "vol": "41M",   "mcap": "2.16T", "icon": "N"},
-    {"id": "MSFT",   "name": "Microsoft",        "cat": "stocks",      "price": 418.90,   "change": 0.67,  "vol": "22M",   "mcap": "3.11T", "icon": "M"},
-    {"id": "TSLA",   "name": "Tesla Inc.",       "cat": "stocks",      "price": 242.10,   "change": -2.88, "vol": "95M",   "mcap": "775B",  "icon": "T"},
-    {"id": "AMZN",   "name": "Amazon.com",       "cat": "stocks",      "price": 196.45,   "change": 1.12,  "vol": "38M",   "mcap": "2.07T", "icon": "A"},
-    {"id": "XAU",    "name": "Gold",             "cat": "commodities", "price": 2312.40,  "change": 0.34,  "vol": "142B",  "mcap": "—",     "icon": "Au"},
-    {"id": "XAG",    "name": "Silver",           "cat": "commodities", "price": 27.84,    "change": -0.21, "vol": "9.4B",  "mcap": "—",     "icon": "Ag"},
-    {"id": "OIL",    "name": "Crude Oil",        "cat": "commodities", "price": 78.92,    "change": 1.56,  "vol": "29B",   "mcap": "—",     "icon": "🛢"},
-    {"id": "NG",     "name": "Natural Gas",      "cat": "commodities", "price": 2.145,    "change": -3.22, "vol": "8.1B",  "mcap": "—",     "icon": "⛽"},
-    {"id": "SPY",    "name": "SPDR S&P 500",     "cat": "etfs",        "price": 542.10,   "change": 0.88,  "vol": "72M",   "mcap": "498B",  "icon": "S"},
-    {"id": "QQQ",    "name": "Invesco QQQ",      "cat": "etfs",        "price": 468.35,   "change": 1.22,  "vol": "45M",   "mcap": "241B",  "icon": "Q"},
-    {"id": "VTI",    "name": "Vanguard Total",   "cat": "etfs",        "price": 248.90,   "change": 0.55,  "vol": "3.2M",  "mcap": "398B",  "icon": "V"},
-    {"id": "EURUSD", "name": "EUR/USD",          "cat": "forex",       "price": 1.0842,   "change": 0.12,  "vol": "6.8T",  "mcap": "—",     "icon": "€"},
-    {"id": "GBPUSD", "name": "GBP/USD",          "cat": "forex",       "price": 1.2710,   "change": -0.08, "vol": "3.1T",  "mcap": "—",     "icon": "£"},
-    {"id": "USDJPY", "name": "USD/JPY",          "cat": "forex",       "price": 151.84,   "change": 0.33,  "vol": "4.4T",  "mcap": "—",     "icon": "¥"},
-]
+TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "forecaster" / "templates" / "forecaster"
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 CATEGORIES = [
     {"id": "all",         "label": "ALL"},
@@ -43,61 +29,67 @@ CATEGORIES = [
 ]
 
 
-def get_template_content(template_name: str) -> str:
-    """Read template file content."""
-    template_path = Path(__file__).parent.parent / "forecaster" / "templates" / "forecaster" / f"{template_name}.html"
-    if not template_path.exists():
-        raise FileNotFoundError(f"Template not found: {template_name}")
-    return template_path.read_text()
+def get_instruments(db: Session) -> list[dict]:
+    """Load instruments from SQLite, shaped the way the frontend JS expects
+    (short keys: cat / vol / mcap, matching the original INSTRUMENTS constant)."""
+    rows = db.query(Instrument).all()
+    return [
+        {
+            "id": r.id,
+            "name": r.name,
+            "cat": r.category,
+            "price": r.price,
+            "change": r.change,
+            "vol": r.volume,
+            "mcap": r.market_cap,
+            "icon": r.icon,
+        }
+        for r in rows
+    ]
 
 
-@router.get("/", response_class=HTMLResponse)
-async def index():
+def render(request: Request, db: Session, template_name: str):
+    instruments = get_instruments(db)
+    context = {
+        "instruments": instruments,
+        "instruments_json": json.dumps(instruments),
+        "categories": CATEGORIES,
+        "show_tour_to_all": SHOW_TOUR_TO_ALL,
+    }
+    return templates.TemplateResponse(request, template_name, context)
+
+
+@router.get("/")
+async def index(request: Request, db: Session = Depends(get_db)):
     """Homepage - markets overview."""
-    content = get_template_content("index")
-    instruments_json = json.dumps(INSTRUMENTS)
-    content = content.replace("{{ instruments_json }}", instruments_json)
-    content = content.replace("{{ instruments_json|safe }}", instruments_json)
-    return content
+    return render(request, db, "index.html")
 
 
-@router.get("/tools", response_class=HTMLResponse)
-async def tools():
+@router.get("/tools")
+async def tools(request: Request, db: Session = Depends(get_db)):
     """Tools page."""
-    content = get_template_content("tools")
-    instruments_json = json.dumps(INSTRUMENTS)
-    content = content.replace("{{ instruments_json }}", instruments_json)
-    content = content.replace("{{ instruments_json|safe }}", instruments_json)
-    return content
+    return render(request, db, "tools.html")
 
 
-@router.get("/markets", response_class=HTMLResponse)
-async def markets():
+@router.get("/markets")
+async def markets(request: Request, db: Session = Depends(get_db)):
     """Markets page."""
-    content = get_template_content("markets")
-    instruments_json = json.dumps(INSTRUMENTS)
-    content = content.replace("{{ instruments_json }}", instruments_json)
-    content = content.replace("{{ instruments_json|safe }}", instruments_json)
-    return content
+    return render(request, db, "markets.html")
 
 
-@router.get("/portfolio", response_class=HTMLResponse)
-async def portfolio():
+@router.get("/portfolio")
+async def portfolio(request: Request, db: Session = Depends(get_db)):
     """Portfolio page."""
-    content = get_template_content("portfolio")
-    instruments_json = json.dumps(INSTRUMENTS)
-    content = content.replace("{{ instruments_json }}", instruments_json)
-    content = content.replace("{{ instruments_json|safe }}", instruments_json)
-    return content
+    return render(request, db, "portfolio.html")
 
 
-@router.get("/about", response_class=HTMLResponse)
-async def about():
+@router.get("/about")
+async def about(request: Request, db: Session = Depends(get_db)):
     """About page."""
-    return get_template_content("about")
+    return render(request, db, "about.html")
 
 
-@router.get("/contact", response_class=HTMLResponse)
-async def contact():
+@router.get("/contact")
+async def contact(request: Request, db: Session = Depends(get_db)):
     """Contact page."""
-    return get_template_content("contact")
+    return render(request, db, "contact.html")

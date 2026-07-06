@@ -20,40 +20,40 @@ FORECAST_CACHE_TTL = 600  # 600 seconds
 
 
 @router.get("/forecast/{symbol}", response_model=ForecastData)
-async def api_forecast(symbol: str, db: Session = Depends(get_db)):
-    """Get forecast for a symbol with 600s cache."""
+def api_forecast(symbol: str, db: Session = Depends(get_db)):
+    """Get forecast for a symbol with 600s cache.
+
+    Sync `def` on purpose: model training takes seconds, so FastAPI must run
+    it in the threadpool instead of blocking the event loop.
+    """
     symbol = symbol.upper()
-    
+
     if symbol not in SYMBOL_MAP:
         raise HTTPException(status_code=404, detail=f"Unknown symbol: {symbol}")
-    
-    # Check cache
-    cached = db.query(ForecastCache).filter(
-        ForecastCache.symbol == symbol,
-        ForecastCache.expires_at > datetime.utcnow()
-    ).first()
-    
-    if cached:
-        return ForecastData(**cached.forecast_data)
-    
+
+    # Check cache (row is unique per symbol; may exist but be expired)
+    row = db.query(ForecastCache).filter(ForecastCache.symbol == symbol).first()
+    if row and row.expires_at > datetime.utcnow():
+        return ForecastData(**row.forecast_data)
+
     # Fetch fresh forecast
     try:
         result = forecast(symbol)
-        
-        # Store in cache
-        expires_at = datetime.utcnow() + timedelta(seconds=FORECAST_CACHE_TTL)
-        cache_entry = ForecastCache(
-            symbol=symbol,
-            forecast_data=result,
-            expires_at=expires_at
-        )
-        db.merge(cache_entry)
-        db.commit()
-        
-        return ForecastData(**result)
     except Exception as e:
         logger.exception(f"Forecast failed for {symbol}")
         raise HTTPException(status_code=500, detail=str(e))
+
+    # Upsert the single cache row for this symbol; merge() can't be used here
+    # because the autoincrement id would always INSERT and hit UNIQUE(symbol)
+    expires_at = datetime.utcnow() + timedelta(seconds=FORECAST_CACHE_TTL)
+    if row:
+        row.forecast_data = result
+        row.expires_at = expires_at
+    else:
+        db.add(ForecastCache(symbol=symbol, forecast_data=result, expires_at=expires_at))
+    db.commit()
+
+    return ForecastData(**result)
 
 
 @router.get("/instruments", response_model=InstrumentsListResponse)
@@ -67,8 +67,8 @@ async def api_instruments(db: Session = Depends(get_db)):
 
 
 @router.get("/price/{symbol}", response_model=PriceResponse)
-async def api_price(symbol: str):
-    """Get current price for a symbol from yfinance."""
+def api_price(symbol: str):
+    """Get current price for a symbol from yfinance (sync def → threadpool)."""
     symbol = symbol.upper()
     
     if symbol not in SYMBOL_MAP:
