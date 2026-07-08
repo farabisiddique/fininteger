@@ -326,8 +326,79 @@ def forecast(symbol_id: str) -> dict:
     return results
 
 
+# ── Price history (for the dashboard charts) ──────────────────────────────────
+HISTORY_PERIODS = {"1mo": 22, "3mo": 66, "6mo": 132, "1y": 260}  # → trading days (demo)
+
+
+def fetch_history(symbol_id: str, period: str = "3mo") -> dict:
+    """Daily OHLCV history shaped for TradingView Lightweight Charts."""
+    ticker = SYMBOL_MAP.get(symbol_id)
+    if not ticker:
+        raise ValueError(f"Unknown symbol: {symbol_id}")
+    if period not in HISTORY_PERIODS:
+        raise ValueError(f"Invalid period: {period}")
+
+    raw = _fetch_ohlcv(ticker, period=period)
+    candles = [
+        {
+            "time": idx.strftime("%Y-%m-%d"),
+            "open": float(row["Open"]),
+            "high": float(row["High"]),
+            "low": float(row["Low"]),
+            "close": float(row["Close"]),
+            "volume": float(row["Volume"]),
+        }
+        for idx, row in raw.iterrows()
+    ]
+    return {"symbol": symbol_id, "period": period, "demo_mode": False, "candles": candles}
+
+
+def _demo_history(symbol_id: str, period: str = "3mo") -> dict:
+    """Deterministic random-walk OHLCV when yfinance is unreachable."""
+    days = HISTORY_PERIODS.get(period, 66)
+    rng = random.Random(f"{symbol_id}:{period}")
+    base = BASE_PRICES.get(symbol_id, 100.0)
+
+    candles = []
+    price = base * (1 - rng.uniform(0.02, 0.15))  # start below current, walk toward it
+    day = datetime.utcnow() - timedelta(days=int(days * 1.45))
+    while len(candles) < days:
+        day += timedelta(days=1)
+        if day.weekday() >= 5:  # skip weekends like real daily bars
+            continue
+        drift = (rng.random() - 0.48) * 0.03
+        o = price
+        c = price * (1 + drift)
+        hi = max(o, c) * (1 + rng.uniform(0, 0.012))
+        lo = min(o, c) * (1 - rng.uniform(0, 0.012))
+        candles.append({
+            "time": day.strftime("%Y-%m-%d"),
+            "open": round(o, 6), "high": round(hi, 6),
+            "low": round(lo, 6), "close": round(c, 6),
+            "volume": float(rng.randint(10_000, 900_000)),
+        })
+        price = c
+    return {"symbol": symbol_id, "period": period, "demo_mode": True, "candles": candles}
+
+
+def history_with_fallback(symbol_id: str, period: str = "3mo") -> dict:
+    """Tries real yfinance history; falls back to demo data on network error."""
+    try:
+        return fetch_history(symbol_id, period)
+    except Exception as e:
+        logger.warning(f"History fetch failed for {symbol_id} ({e}); using demo mode")
+        return _demo_history(symbol_id, period)
+
+
 # ── Demo / offline fallback ────────────────────────────────────────────────────
 import random
+
+BASE_PRICES = {
+    "BTC":67420.50,"ETH":3842.10,"SOL":182.45,"BNB":598.30,"XRP":0.621,
+    "AAPL":228.35,"NVDA":875.20,"MSFT":418.90,"TSLA":242.10,"AMZN":196.45,
+    "XAU":2312.40,"XAG":27.84,"OIL":78.92,"NG":2.145,"SPY":542.10,
+    "QQQ":468.35,"VTI":248.90,"EURUSD":1.0842,"GBPUSD":1.271,"USDJPY":151.84,
+}
 
 def _demo_forecast(symbol_id: str) -> dict:
     """
@@ -335,12 +406,6 @@ def _demo_forecast(symbol_id: str) -> dict:
     INSTRUMENTS when yfinance cannot be reached (e.g. no internet / rate-limited).
     The XGBoost signal structure is preserved so the UI renders correctly.
     """
-    BASE_PRICES = {
-        "BTC":67420.50,"ETH":3842.10,"SOL":182.45,"BNB":598.30,"XRP":0.621,
-        "AAPL":228.35,"NVDA":875.20,"MSFT":418.90,"TSLA":242.10,"AMZN":196.45,
-        "XAU":2312.40,"XAG":27.84,"OIL":78.92,"NG":2.145,"SPY":542.10,
-        "QQQ":468.35,"VTI":248.90,"EURUSD":1.0842,"GBPUSD":1.271,"USDJPY":151.84,
-    }
     rng = random.Random(symbol_id + str(int(datetime.utcnow().timestamp() // 600)))
     base = BASE_PRICES.get(symbol_id, 100.0)
 

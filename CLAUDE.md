@@ -43,6 +43,8 @@ Interactive API docs at `/docs` (Swagger) once running. There is no test suite.
 
 Models are trained per-request (nothing persisted); the SQLite cache is the only thing keeping this responsive.
 
+**Price history for charts:** `GET /api/history/{symbol}?range=1mo|3mo|6mo|1y` returns daily OHLCV (`ml_engine.history_with_fallback`, same demo-fallback pattern), cached in an in-process dict (600s, per worker — not SQLite). The dashboard chart is TradingView Lightweight Charts v4 (pinned via unpkg CDN in `index.html`) with five chart-type tabs (candles/bars/line/area/baseline) + volume histogram; its data shape is `{time: "YYYY-MM-DD", open, high, low, close, volume}` — keep `_demo_history` and `schemas.Candle` in sync with it.
+
 **API endpoints are sync `def` on purpose** — model training and yfinance calls block for seconds, so FastAPI must run them in its threadpool. Don't convert them to `async def` without moving the blocking work to an executor.
 
 **Frontend:** each template is a fully self-contained page — Tailwind via CDN with an inline `tailwind.config` (shared palette: `bg`, `surface`, `accent`, `gain`, `loss`, …), inline CSS, inline vanilla JS consuming the JSON APIs. No base template, no build step; shared styling changes must be replicated across all six templates. Brand images (∫F icon, favicons, lockup) are in `static/images/`, mounted at `/static`. Brand palette if new assets are ever needed: Navy `#0A1B3A`, Electric Blue `#2E6CF6`, Light Blue `#56A8FF`; type: Space Grotesk.

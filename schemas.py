@@ -42,6 +42,22 @@ class ForecastData(BaseModel):
     market_data: Dict[str, Any]
 
 
+class Candle(BaseModel):
+    time: str
+    open: float
+    high: float
+    low: float
+    close: float
+    volume: float
+
+
+class HistoryData(BaseModel):
+    symbol: str
+    period: str
+    demo_mode: bool = False
+    candles: List[Candle]
+
+
 class InstrumentsListResponse(BaseModel):
     instruments: List[InstrumentResponse]
 
