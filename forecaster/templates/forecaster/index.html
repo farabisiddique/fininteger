@@ -811,6 +811,7 @@
     ];
 
     const overlay = document.getElementById('tour-overlay');
+    const cardEl  = document.getElementById('tour-card');
     const elLabel = document.getElementById('tour-step-label');
     const elTitle = document.getElementById('tour-title');
     const elBody  = document.getElementById('tour-body');
@@ -828,6 +829,37 @@
 
     function unlight() { if (lit) { lit.classList.remove('tour-highlight'); lit = null; } }
 
+    // Dock the card next to the highlighted element: right → left → below → above,
+    // whichever fits the viewport. No target → centered (flex) as before.
+    function placeCard(target) {
+      if (!target) {
+        cardEl.style.position = '';
+        cardEl.style.left = '';
+        cardEl.style.top = '';
+        return;
+      }
+      target.scrollIntoView({ block: 'nearest' });
+      const r = target.getBoundingClientRect();
+      const gap = 16, margin = 12;
+      const cw = cardEl.offsetWidth, ch = cardEl.offsetHeight;
+      const vw = window.innerWidth, vh = window.innerHeight;
+      let left, top;
+      if (r.right + gap + cw <= vw - margin) {          // right of the section
+        left = r.right + gap; top = r.top;
+      } else if (r.left - gap - cw >= margin) {          // left of the section
+        left = r.left - gap - cw; top = r.top;
+      } else if (r.bottom + gap + ch <= vh - margin) {   // below the section
+        left = r.left; top = r.bottom + gap;
+      } else {                                           // above the section
+        left = r.left; top = r.top - gap - ch;
+      }
+      left = Math.max(margin, Math.min(left, vw - cw - margin));
+      top  = Math.max(margin, Math.min(top,  vh - ch - margin));
+      cardEl.style.position = 'fixed';
+      cardEl.style.left = left + 'px';
+      cardEl.style.top  = top + 'px';
+    }
+
     function show(i) {
       step = i;
       const s = STEPS[i];
@@ -843,6 +875,7 @@
       btnBack.style.visibility = i === 0 ? 'hidden' : 'visible';
       btnSkip.style.visibility = s.final ? 'hidden' : 'visible';
       btnNext.textContent = s.final ? 'I UNDERSTAND & ACCEPT' : 'NEXT →';
+      placeCard(lit);
     }
 
     function finish() {
@@ -858,9 +891,13 @@
     btnBack.addEventListener('click', () => { if (step > 0) show(step - 1); });
     // Skipping still lands on the disclaimer — it must be acknowledged
     btnSkip.addEventListener('click', () => show(STEPS.length - 1));
+    window.addEventListener('resize', () => {
+      if (overlay.classList.contains('open')) placeCard(lit);
+    });
 
-    show(0);
+    // Open first so the card has real dimensions when placeCard measures it
     overlay.classList.add('open');
+    show(0);
   })();
   </script>
 </body>
