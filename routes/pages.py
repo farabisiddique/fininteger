@@ -83,6 +83,12 @@ async def portfolio(request: Request, db: Session = Depends(get_db)):
     return render(request, db, "portfolio.html")
 
 
+@router.get("/learn")
+async def learn(request: Request, db: Session = Depends(get_db)):
+    """Learn page — investing / finance / crypto education."""
+    return render(request, db, "learn.html")
+
+
 @router.get("/about")
 async def about(request: Request, db: Session = Depends(get_db)):
     """About page."""

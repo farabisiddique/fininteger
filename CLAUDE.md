@@ -47,7 +47,7 @@ Models are trained per-request (nothing persisted); the SQLite cache is the only
 
 **API endpoints are sync `def` on purpose** — model training and yfinance calls block for seconds, so FastAPI must run them in its threadpool. Don't convert them to `async def` without moving the blocking work to an executor.
 
-**Frontend:** each template is a fully self-contained page — Tailwind via CDN with an inline `tailwind.config` (shared palette: `bg`, `surface`, `accent`, `gain`, `loss`, …), inline CSS, inline vanilla JS consuming the JSON APIs. No base template, no build step; shared styling changes must be replicated across all six templates. Brand images (∫F icon, favicons, lockup) are in `static/images/`, mounted at `/static`. Brand palette if new assets are ever needed: Navy `#0A1B3A`, Electric Blue `#2E6CF6`, Light Blue `#56A8FF`; type: Space Grotesk.
+**Frontend:** each template is a fully self-contained page — Tailwind via CDN with an inline `tailwind.config` (shared palette: `bg`, `surface`, `accent`, `gain`, `loss`, …), inline CSS, inline vanilla JS consuming the JSON APIs. No base template, no build step; shared styling changes must be replicated across all seven templates (the navbar is intentionally identical everywhere — keep it in sync). Brand images (∫F icon, favicons, lockup) are in `static/images/`, mounted at `/static`. Brand palette if new assets are ever needed: Navy `#0A1B3A`, Electric Blue `#2E6CF6`, Light Blue `#56A8FF`; type: Space Grotesk.
 
 ## Gotchas
 

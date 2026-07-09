@@ -34,8 +34,6 @@
     .ticker-wrap { overflow:hidden; }
     .ticker-inner { display:flex;gap:2rem;white-space:nowrap;animation:ticker-scroll 30s linear infinite;width:max-content; }
     .ticker-inner:hover { animation-play-state:paused; }
-    .nav-link { font-size:10px;color:#8ab0cc;letter-spacing:.06em;transition:color .15s;text-decoration:none; }
-    .nav-link:hover,.nav-link.active { color:#00d4ff; }
     .card { background:#0a1520; border:1px solid #0d2035; border-radius:12px; }
     .glass-input {
       background:rgba(3,7,16,0.7); border:1px solid rgba(13,32,53,0.8);
@@ -82,6 +80,9 @@
     .alloc-fill { height:100%;border-radius:2px; }
     .tag { font-size:8px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:.06em; }
     .empty-state { text-align:center;padding:40px 20px;color:#7aadc8;font-size:11px; }
+    .nav-link { font-size:10px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
+    .nav-link:hover, .nav-link.active { color:#00d4ff; }
+    .nav-link.active { font-weight:700; }
   </style>
   <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16.png">
@@ -102,7 +103,8 @@
       <a href="/" class="nav-link">DASHBOARD</a>
       <a href="/markets/" class="nav-link">MARKETS</a>
       <a href="/tools/" class="nav-link">TOOLS</a>
-      <!-- Portfolio hidden for now: <a href="/portfolio/" class="nav-link active">PORTFOLIO</a> -->
+      <a href="/learn/" class="nav-link">LEARN</a>
+      <!-- Portfolio hidden for now: <a href="/portfolio/" class="nav-link">PORTFOLIO</a> -->
       <a href="/about/" class="nav-link">ABOUT</a>
       <a href="/contact/" class="nav-link">CONTACT</a>
     </nav>

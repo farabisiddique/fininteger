@@ -98,6 +98,9 @@
     .forecast-chg { font-size:11px; font-weight:700; margin-bottom:6px; }
     .forecast-conf { font-size:9px; color:#8ab0cc; }
     .forecast-loader { display:none; width:20px; height:20px; border:2px solid transparent; border-top-color:#00d4ff; border-radius:50%; animation:ai-spin .7s linear infinite; margin:auto; }
+    .nav-link { font-size:10px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
+    .nav-link:hover, .nav-link.active { color:#00d4ff; }
+    .nav-link.active { font-weight:700; }
   </style>
   <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16.png">
@@ -112,13 +115,14 @@
       <span class="font-display font-extrabold text-[15px] text-textb tracking-[0.04em]">fininteger</span>
       <span class="text-[9px] border-l border-border pl-3 tracking-[0.1em]" style="color:#7aadc8">XGBoost-Powered Forecasting</span>
     </div>
-    <nav class="flex items-center gap-5">
-      <a href="/" style="font-size:10px;color:#00d4ff;letter-spacing:0.06em;text-decoration:none;font-weight:700">DASHBOARD</a>
-      <a href="/markets/" style="font-size:10px;color:#8ab0cc;letter-spacing:0.06em;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#00d4ff'" onmouseout="this.style.color='#8ab0cc'">MARKETS</a>
-      <a href="/tools/" style="font-size:10px;color:#8ab0cc;letter-spacing:0.06em;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#00d4ff'" onmouseout="this.style.color='#8ab0cc'">TOOLS</a>
-      <!-- Portfolio hidden for now: <a href="/portfolio/" style="font-size:10px;color:#8ab0cc;letter-spacing:0.06em;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#00d4ff'" onmouseout="this.style.color='#8ab0cc'">PORTFOLIO</a> -->
-      <a href="/about/" style="font-size:10px;color:#8ab0cc;letter-spacing:0.06em;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#00d4ff'" onmouseout="this.style.color='#8ab0cc'">ABOUT</a>
-      <a href="/contact/" style="font-size:10px;color:#8ab0cc;letter-spacing:0.06em;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#00d4ff'" onmouseout="this.style.color='#8ab0cc'">CONTACT</a>
+    <nav class="flex items-center gap-6">
+      <a href="/" class="nav-link active">DASHBOARD</a>
+      <a href="/markets/" class="nav-link">MARKETS</a>
+      <a href="/tools/" class="nav-link">TOOLS</a>
+      <a href="/learn/" class="nav-link">LEARN</a>
+      <!-- Portfolio hidden for now: <a href="/portfolio/" class="nav-link">PORTFOLIO</a> -->
+      <a href="/about/" class="nav-link">ABOUT</a>
+      <a href="/contact/" class="nav-link">CONTACT</a>
     </nav>
     <div class="flex items-center gap-5">
       <div class="flex items-center gap-1.5">
@@ -881,7 +885,7 @@
       },
       {
         title: 'Explore further',
-        body: 'The nav bar takes you to <strong>Markets</strong> (full overview) and <strong>Tools</strong> (financial calculators).',
+        body: 'The nav bar takes you to <strong>Markets</strong> (full overview), <strong>Tools</strong> (financial calculators) and <strong>Learn</strong> (investing education for beginners).',
         target: 'header nav'
       },
       {

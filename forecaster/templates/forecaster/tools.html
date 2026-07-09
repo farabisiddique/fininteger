@@ -200,9 +200,6 @@
     .field-label { font-size: 9px; color: #7aadc8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
 
     /* NAV */
-    .nav-link { font-size: 10px; color: #8ab0cc; letter-spacing: 0.06em; transition: color 0.15s; cursor: pointer; text-decoration: none; }
-    .nav-link:hover { color: #00d4ff; }
-    .nav-link.active { color: #00d4ff; }
 
     /* SECTION HEADER */
     .section-header {
@@ -268,6 +265,9 @@
 
     /* MINI CHART for DCA */
     .mini-bar { display:inline-block; background: rgba(0,212,255,0.3); border-radius: 2px; margin-right: 2px; vertical-align: bottom; }
+    .nav-link { font-size:10px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
+    .nav-link:hover, .nav-link.active { color:#00d4ff; }
+    .nav-link.active { font-weight:700; }
   </style>
   <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16.png">
@@ -288,6 +288,7 @@
       <a href="/" class="nav-link">DASHBOARD</a>
       <a href="/markets/" class="nav-link">MARKETS</a>
       <a href="/tools/" class="nav-link active">TOOLS</a>
+      <a href="/learn/" class="nav-link">LEARN</a>
       <!-- Portfolio hidden for now: <a href="/portfolio/" class="nav-link">PORTFOLIO</a> -->
       <a href="/about/" class="nav-link">ABOUT</a>
       <a href="/contact/" class="nav-link">CONTACT</a>

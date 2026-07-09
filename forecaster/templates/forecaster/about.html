@@ -41,12 +41,6 @@
     .ticker-inner { display:flex; gap:2rem; white-space:nowrap; animation:ticker-scroll 30s linear infinite; width:max-content; }
     .ticker-inner:hover { animation-play-state:paused; }
 
-    .nav-link {
-      font-size:10px; color:#8ab0cc; letter-spacing:0.06em;
-      text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500;
-    }
-    .nav-link:hover { color:#00d4ff; }
-    .nav-link.active { color:#00d4ff; font-weight:700; }
 
     .glass-card {
       background: linear-gradient(135deg, rgba(10,21,32,0.9) 0%, rgba(5,10,20,0.8) 100%);
@@ -98,6 +92,9 @@
       height:1px; background:linear-gradient(90deg,transparent,rgba(0,212,255,0.3),transparent);
       margin:40px 0;
     }
+    .nav-link { font-size:10px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
+    .nav-link:hover, .nav-link.active { color:#00d4ff; }
+    .nav-link.active { font-weight:700; }
   </style>
   <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16.png">
@@ -112,10 +109,11 @@
       <span style="font-family:'JetBrains Mono',monospace;font-weight:800;font-size:15px;color:#eaf6ff;letter-spacing:0.04em;">fininteger</span>
       <span style="font-size:9px;color:#7aadc8;border-left:1px solid #0d2035;padding-left:12px;letter-spacing:0.1em;font-family:'JetBrains Mono',monospace;">XGBoost-Powered Forecasting</span>
     </div>
-    <nav class="flex items-center gap-5">
+    <nav class="flex items-center gap-6">
       <a href="/" class="nav-link">DASHBOARD</a>
       <a href="/markets/" class="nav-link">MARKETS</a>
       <a href="/tools/" class="nav-link">TOOLS</a>
+      <a href="/learn/" class="nav-link">LEARN</a>
       <!-- Portfolio hidden for now: <a href="/portfolio/" class="nav-link">PORTFOLIO</a> -->
       <a href="/about/" class="nav-link active">ABOUT</a>
       <a href="/contact/" class="nav-link">CONTACT</a>
