@@ -20,26 +20,69 @@ logger = logging.getLogger(__name__)
 
 # ── Symbol mapping: internal ID → yfinance ticker ─────────────────────────────
 SYMBOL_MAP = {
+    # Crypto
     "BTC":    "BTC-USD",
     "ETH":    "ETH-USD",
     "SOL":    "SOL-USD",
     "BNB":    "BNB-USD",
     "XRP":    "XRP-USD",
+    "ADA":    "ADA-USD",
+    "DOGE":   "DOGE-USD",
+    "DOT":    "DOT-USD",
+    "AVAX":   "AVAX-USD",
+    "LINK":   "LINK-USD",
+    "LTC":    "LTC-USD",
+    "TRX":    "TRX-USD",
+    # Stocks
     "AAPL":   "AAPL",
     "NVDA":   "NVDA",
     "MSFT":   "MSFT",
     "TSLA":   "TSLA",
     "AMZN":   "AMZN",
+    "GOOGL":  "GOOGL",
+    "META":   "META",
+    "NFLX":   "NFLX",
+    "AMD":    "AMD",
+    "INTC":   "INTC",
+    "JPM":    "JPM",
+    "V":      "V",
+    # Commodities (futures)
     "XAU":    "GC=F",
     "XAG":    "SI=F",
     "OIL":    "CL=F",
     "NG":     "NG=F",
+    "HG":     "HG=F",
+    "PL":     "PL=F",
+    "PA":     "PA=F",
+    "ZC":     "ZC=F",
+    "ZW":     "ZW=F",
+    "ZS":     "ZS=F",
+    "KC":     "KC=F",
+    "SB":     "SB=F",
+    "CT":     "CT=F",
+    "CC":     "CC=F",
+    # ETFs
     "SPY":    "SPY",
     "QQQ":    "QQQ",
     "VTI":    "VTI",
+    "IWM":    "IWM",
+    "DIA":    "DIA",
+    "EFA":    "EFA",
+    "GLD":    "GLD",
+    "XLK":    "XLK",
+    "XLF":    "XLF",
+    "ARKK":   "ARKK",
+    # Forex
     "EURUSD": "EURUSD=X",
     "GBPUSD": "GBPUSD=X",
     "USDJPY": "USDJPY=X",
+    "AUDUSD": "AUDUSD=X",
+    "USDCAD": "USDCAD=X",
+    "USDCHF": "USDCHF=X",
+    "NZDUSD": "NZDUSD=X",
+    "EURGBP": "EURGBP=X",
+    "EURJPY": "EURJPY=X",
+    "GBPJPY": "GBPJPY=X",
 }
 
 # Forecast horizons in trading days
@@ -395,9 +438,19 @@ import random
 
 BASE_PRICES = {
     "BTC":67420.50,"ETH":3842.10,"SOL":182.45,"BNB":598.30,"XRP":0.621,
+    "ADA":0.452,"DOGE":0.1385,"DOT":6.84,"AVAX":28.90,"LINK":14.25,
+    "LTC":84.15,"TRX":0.124,
     "AAPL":228.35,"NVDA":875.20,"MSFT":418.90,"TSLA":242.10,"AMZN":196.45,
-    "XAU":2312.40,"XAG":27.84,"OIL":78.92,"NG":2.145,"SPY":542.10,
-    "QQQ":468.35,"VTI":248.90,"EURUSD":1.0842,"GBPUSD":1.271,"USDJPY":151.84,
+    "GOOGL":178.35,"META":512.20,"NFLX":645.80,"AMD":162.45,"INTC":30.85,
+    "JPM":198.50,"V":275.60,
+    "XAU":2312.40,"XAG":27.84,"OIL":78.92,"NG":2.145,"HG":4.485,
+    "PL":968.40,"PA":942.60,"ZC":452.25,"ZW":568.50,"ZS":1182.75,
+    "KC":228.85,"SB":19.42,"CT":71.28,"CC":7845.00,
+    "SPY":542.10,"QQQ":468.35,"VTI":248.90,"IWM":201.35,"DIA":392.80,
+    "EFA":78.95,"GLD":214.50,"XLK":228.70,"XLF":41.85,"ARKK":44.62,
+    "EURUSD":1.0842,"GBPUSD":1.271,"USDJPY":151.84,"AUDUSD":0.6648,
+    "USDCAD":1.3712,"USDCHF":0.8985,"NZDUSD":0.6112,"EURGBP":0.853,
+    "EURJPY":164.62,"GBPJPY":193.05,
 }
 
 def _demo_forecast(symbol_id: str) -> dict:

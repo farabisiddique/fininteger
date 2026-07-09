@@ -81,7 +81,7 @@
       <a href="/" class="nav-link">DASHBOARD</a>
       <a href="/markets/" class="nav-link active">MARKETS</a>
       <a href="/tools/" class="nav-link">TOOLS</a>
-      <a href="/portfolio/" class="nav-link">PORTFOLIO</a>
+      <!-- Portfolio hidden for now: <a href="/portfolio/" class="nav-link">PORTFOLIO</a> -->
       <a href="/about/" class="nav-link">ABOUT</a>
       <a href="/contact/" class="nav-link">CONTACT</a>
     </nav>
@@ -142,6 +142,26 @@
       </div>
     </div>
 
+    <!-- MARKET LISTS: TRENDING / GAINERS / LOSERS / CHEAP (min 10 each, follow category filter) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4" id="market-lists">
+      <div class="card fadein">
+        <div class="card-header pb-2 flex items-center justify-between"><span>🔥 TRENDING</span><span class="text-[8px] text-textdim" id="cnt-trending"></span></div>
+        <div id="list-trending" class="px-3 pb-3"></div>
+      </div>
+      <div class="card fadein">
+        <div class="card-header pb-2 flex items-center justify-between"><span>🚀 TOP GAINERS</span><span class="text-[8px] text-textdim" id="cnt-gainers"></span></div>
+        <div id="list-gainers" class="px-3 pb-3"></div>
+      </div>
+      <div class="card fadein">
+        <div class="card-header pb-2 flex items-center justify-between"><span>📉 TOP LOSERS</span><span class="text-[8px] text-textdim" id="cnt-losers"></span></div>
+        <div id="list-losers" class="px-3 pb-3"></div>
+      </div>
+      <div class="card fadein">
+        <div class="card-header pb-2 flex items-center justify-between"><span>💰 CHEAP</span><span class="text-[8px] text-textdim" id="cnt-cheap"></span></div>
+        <div id="list-cheap" class="px-3 pb-3"></div>
+      </div>
+    </div>
+
     <!-- MAIN TABLE + HEATMAP -->
     <div class="flex gap-5" style="align-items:flex-start">
 
@@ -171,18 +191,6 @@
           <div class="p-4">
             <div id="heatmap-grid" class="grid grid-cols-3 gap-2"></div>
           </div>
-        </div>
-
-        <!-- TOP GAINERS -->
-        <div class="card fadein">
-          <div class="card-header pb-3">🚀 TOP GAINERS</div>
-          <div id="top-gainers" class="p-3"></div>
-        </div>
-
-        <!-- TOP LOSERS -->
-        <div class="card fadein">
-          <div class="card-header pb-3">📉 TOP LOSERS</div>
-          <div id="top-losers" class="p-3"></div>
         </div>
 
         <!-- MARKET SENTIMENT -->
@@ -304,21 +312,44 @@
     }).join('');
   }
 
-  function renderMovers(){
-    const sorted=[...INSTRUMENTS].sort((a,b)=>b.change-a.change);
-    const gainers=sorted.slice(0,4);
-    const losers=[...INSTRUMENTS].sort((a,b)=>a.change-b.change).slice(0,4);
-    function moverRow(inst,col){
-      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(13,32,53,0.5)">
-        <div style="display:flex;gap:8px;align-items:center">
-          <span style="font-size:11px;font-weight:700;color:#eaf6ff;font-family:'Syne',sans-serif">${inst.id}</span>
-          <span style="font-size:9px;color:#8ab0cc">${inst.name}</span>
+  // ── MARKET LISTS (trending / gainers / losers / cheap) ────
+  // Each shows 10 instruments and respects the category filter.
+  const LIST_SIZE=10;
+  const LISTS=[
+    {el:'list-trending', cnt:'cnt-trending', sort:(a,b)=>Math.abs(b.change)-Math.abs(a.change)},  // biggest movers either way
+    {el:'list-gainers',  cnt:'cnt-gainers',  sort:(a,b)=>b.change-a.change},
+    {el:'list-losers',   cnt:'cnt-losers',   sort:(a,b)=>a.change-b.change},
+    {el:'list-cheap',    cnt:'cnt-cheap',    sort:(a,b)=>a.price-b.price},                        // lowest price first
+  ];
+
+  function listRow(inst,rank){
+    const pos=inst.change>=0, col=pos?'#00ff88':'#ff3366';
+    const catTxtColors={'crypto':'#00d4ff','stocks':'#00ff88','commodities':'#ffb800','etfs':'#8899ff','forex':'#ff8243'};
+    const tc=catTxtColors[inst.cat]||'#4a7090';
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 4px;border-bottom:1px solid rgba(13,32,53,0.5);cursor:pointer"
+                 onclick="window.location='/?sym=${inst.id}'">
+      <div style="display:flex;gap:8px;align-items:center;min-width:0">
+        <span style="font-size:9px;color:#4a7090;width:14px;text-align:right;flex-shrink:0">${rank}</span>
+        <div style="width:22px;height:22px;border-radius:6px;background:${tc}18;border:1px solid ${tc}30;display:flex;align-items:center;justify-content:center;font-size:9px;color:${tc};font-weight:700;flex-shrink:0">${inst.icon}</div>
+        <div style="min-width:0">
+          <div style="font-size:10px;font-weight:700;color:#eaf6ff;font-family:'Syne',sans-serif">${inst.id}</div>
+          <div style="font-size:8px;color:#8ab0cc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px">${inst.name}</div>
         </div>
-        <span style="font-size:11px;font-weight:800;color:${col}">${inst.change>=0?'+':''}${inst.change}%</span>
-      </div>`;
-    }
-    document.getElementById('top-gainers').innerHTML=gainers.map(i=>moverRow(i,'#00ff88')).join('');
-    document.getElementById('top-losers').innerHTML=losers.map(i=>moverRow(i,'#ff3366')).join('');
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:10px;font-weight:700;color:#eaf6ff">${fmtP(inst.price)}</div>
+        <div style="font-size:9px;font-weight:800;color:${col}">${pos?'+':''}${inst.change}%</div>
+      </div>
+    </div>`;
+  }
+
+  function renderLists(){
+    const pool=INSTRUMENTS.filter(i=>activeCat==='all'||i.cat===activeCat);
+    LISTS.forEach(cfg=>{
+      const items=[...pool].sort(cfg.sort).slice(0,LIST_SIZE);
+      document.getElementById(cfg.el).innerHTML=items.map((inst,i)=>listRow(inst,i+1)).join('');
+      document.getElementById(cfg.cnt).textContent=activeCat==='all'?'ALL':activeCat.toUpperCase();
+    });
   }
 
   function renderSentiment(){
@@ -348,6 +379,7 @@
       b.classList.toggle('active',b.dataset.cat===cat);
     });
     renderTable();
+    renderLists();
   }
 
   // FILTER BTN LISTENERS
@@ -365,7 +397,7 @@
     });
   });
 
-  renderTable(); renderStats(); renderHeatmap(); renderMovers(); renderSentiment();
+  renderTable(); renderStats(); renderHeatmap(); renderLists(); renderSentiment();
   </script>
 </body>
 </html>
