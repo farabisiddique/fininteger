@@ -268,10 +268,20 @@
     .nav-link { font-size:10px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
     .nav-link:hover, .nav-link.active { color:#00d4ff; }
     .nav-link.active { font-weight:700; }
+    /* LIGHT MODE (invert + hue-rotate keeps brand hues; images counter-inverted) */
+    html.light-mode { filter: invert(1) hue-rotate(180deg); background:#fbfbfd; }
+    html.light-mode img { filter: invert(1) hue-rotate(180deg); }
+    .theme-btn { background:none; border:1px solid #1a3a5c; border-radius:6px; padding:3px 10px; cursor:pointer;
+                 font-size:9px; letter-spacing:0.08em; color:#8ab0cc; font-family:'JetBrains Mono',monospace;
+                 transition:color .15s,border-color .15s; }
+    .theme-btn:hover { color:#00d4ff; border-color:#00d4ff; }
   </style>
   <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/static/images/appicon-180.png">
+  <script>/* apply saved theme before first paint */
+    if (localStorage.getItem('fininteger_theme') === 'light') document.documentElement.classList.add('light-mode');
+  </script>
 </head>
 <body class="flex flex-col min-h-screen bg-bg text-textd font-mono">
   <div class="bg-mesh"></div>
@@ -280,8 +290,7 @@
   <header class="flex items-center justify-between px-6 h-[52px] border-b border-border shrink-0 sticky top-0 z-50"
           style="background:rgba(5,10,14,0.92);backdrop-filter:blur(20px);">
     <div class="flex items-center gap-3">
-      <img src="/static/images/icon-fF-dark.svg" alt="fininteger logo" style="height:28px;width:auto">
-      <span class="font-display font-extrabold text-[15px] text-textb tracking-[0.04em]">fininteger</span>
+      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger — home" style="height:34px;width:auto;border-radius:6px;"></a>
       <span class="text-[9px] text-textdim border-l border-border pl-3 tracking-[0.1em]">AI Based Financial Adviser</span>
     </div>
     <nav class="flex items-center gap-6">
@@ -294,6 +303,7 @@
       <a href="/contact/" class="nav-link">CONTACT</a>
     </nav>
     <div class="flex items-center gap-5">
+      <button id="theme-toggle" class="theme-btn" title="Toggle light / dark mode">LIGHT</button>
       <div class="flex items-center gap-1.5">
         <div class="live-dot w-1.5 h-1.5 rounded-full bg-gain"></div>
         <span class="text-[9px] text-gain tracking-[0.1em]">LIVE</span>
@@ -301,6 +311,25 @@
       <span id="clock" class="text-[9px] text-textdim"></span>
     </div>
   </header>
+  <script>
+  (function(){
+    const btn = document.getElementById('theme-toggle');
+    const logo = document.getElementById('brand-logo');
+    function applyTheme(){
+      const light = document.documentElement.classList.contains('light-mode');
+      btn.textContent = light ? 'DARK' : 'LIGHT';
+      if (logo) logo.src = light ? '/static/images/lockup-white.png' : '/static/images/lockup-navy.png';
+    }
+    btn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('light-mode');
+      localStorage.setItem('fininteger_theme',
+        document.documentElement.classList.contains('light-mode') ? 'light' : 'dark');
+      applyTheme();
+    });
+    applyTheme();
+  })();
+  </script>
+
 
   <!-- TICKER STRIP -->
   <div class="ticker-wrap shrink-0 border-b border-border py-1.5 sticky top-[52px] z-40" style="background:#030710">

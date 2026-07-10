@@ -22,6 +22,27 @@ venv\Scripts\python init_db.py
 
 Interactive API docs at `/docs` (Swagger) once running. There is no test suite.
 
+## Deployment (VPS)
+
+**After completing ANY change to the codebase, always end your final summary with the exact steps to deploy it on the server**, including the process reload/restart. The app runs on a Linux VPS as a systemd service (`fininteger`) behind nginx, deployed at `/var/www/fininteger`, domain `atzsolution.tech`. The standard deploy is:
+
+```bash
+cd /var/www/fininteger
+git pull
+chown -R www-data:www-data .
+systemctl restart fininteger      # required — uvicorn runs without --reload in prod
+```
+
+Adjust the steps to match the change:
+- **Dependency changes** (`requirements.txt`) → add `venv/bin/pip install -r requirements.txt` before the restart.
+- **Instrument/seed changes** (`init_db.py`) → add `sudo -u www-data venv/bin/python init_db.py` (force-reseed) before the restart.
+- **`.env` changes** → not in git; state the exact line to add/edit on the server, then restart (env is read once at startup).
+- **New static files** → confirm they're committed (`git add static`), no extra server step (uvicorn serves `/static`; nginx proxies).
+- **nginx config changes** (rare) → `nginx -t && systemctl reload nginx`.
+- **Template/code-only changes** → the standard deploy above is enough; no DB or dependency steps.
+
+Verify after deploy: `curl http://127.0.0.1:8000/health` on the server, then spot-check the changed page/endpoint via the public URL.
+
 **Config:** `config.py` loads `.env` via python-dotenv (see `.env.example`). Everything has defaults; `DATABASE_URL` defaults to `sqlite:///./forecast.db`. `SHOW_TOUR_TO_ALL=1` shows the dashboard's onboarding tour + risk disclaimer on every visit (testing); `0`/unset shows it to first-time visitors only (tracked via the `fininteger_tour_done` localStorage key — the tour lives at the bottom of `index.html`).
 
 ## Architecture
@@ -47,7 +68,7 @@ Models are trained per-request (nothing persisted); the SQLite cache is the only
 
 **API endpoints are sync `def` on purpose** — model training and yfinance calls block for seconds, so FastAPI must run them in its threadpool. Don't convert them to `async def` without moving the blocking work to an executor.
 
-**Frontend:** each template is a fully self-contained page — Tailwind via CDN with an inline `tailwind.config` (shared palette: `bg`, `surface`, `accent`, `gain`, `loss`, …), inline CSS, inline vanilla JS consuming the JSON APIs. No base template, no build step; shared styling changes must be replicated across all seven templates (the navbar is intentionally identical everywhere — keep it in sync). Brand images (∫F icon, favicons, lockup) are in `static/images/`, mounted at `/static`. Brand palette if new assets are ever needed: Navy `#0A1B3A`, Electric Blue `#2E6CF6`, Light Blue `#56A8FF`; type: Space Grotesk.
+**Frontend:** each template is a fully self-contained page — Tailwind via CDN with an inline `tailwind.config` (shared palette: `bg`, `surface`, `accent`, `gain`, `loss`, …), inline CSS, inline vanilla JS consuming the JSON APIs. No base template, no build step; shared styling changes must be replicated across all seven templates (the navbar is intentionally identical everywhere — keep it in sync). Light mode is implemented as `html.light-mode { filter: invert(1) hue-rotate(180deg) }` with images counter-inverted (colors stay hardcoded dark; the filter flips them) — the toggle button, early-apply head script, and logo swap (`lockup-navy` ↔ `lockup-white`) are replicated in every template, keyed to the `fininteger_theme` localStorage entry. Brand images (∫F icon, favicons, lockup) are in `static/images/`, mounted at `/static`. Brand palette if new assets are ever needed: Navy `#0A1B3A`, Electric Blue `#2E6CF6`, Light Blue `#56A8FF`; type: Space Grotesk.
 
 ## Gotchas
 
