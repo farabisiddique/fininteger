@@ -26,7 +26,7 @@
   </script>
   <style>
     * { box-sizing:border-box; margin:0; padding:0; }
-    html { zoom: 1.25; }
+    html { font-size: 100%; }
     body { background:#050a0e; font-family:'Poppins',system-ui,sans-serif; color:#c8dde8; min-height:100vh; }
     ::-webkit-scrollbar { width:4px; }
     ::-webkit-scrollbar-track { background:#050a0e; }
@@ -149,10 +149,10 @@
     <div class="flex items-center gap-3">
       <img src="/static/images/icon-fF-dark.svg" alt="fininteger logo" style="height:28px;width:auto">
       <span style="font-family:'JetBrains Mono',monospace;font-weight:800;font-size:15px;color:#eaf6ff;letter-spacing:0.04em;">fininteger</span>
-      <span style="font-size:9px;color:#7aadc8;border-left:1px solid #0d2035;padding-left:12px;letter-spacing:0.1em;font-family:'JetBrains Mono',monospace;">XGBoost-Powered Forecasting</span>
+      <span style="font-size:9px;color:#7aadc8;border-left:1px solid #0d2035;padding-left:12px;letter-spacing:0.1em;font-family:'JetBrains Mono',monospace;">AI Based Financial Adviser</span>
     </div>
     <nav class="flex items-center gap-6">
-      <a href="/" class="nav-link">DASHBOARD</a>
+      <a href="/" class="nav-link">HOME</a>
       <a href="/markets/" class="nav-link">MARKETS</a>
       <a href="/tools/" class="nav-link">TOOLS</a>
       <a href="/learn/" class="nav-link">LEARN</a>
@@ -201,8 +201,8 @@
       </p>
     </div>
 
-    <!-- MAIN GRID: form + sidebar -->
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 mb-16">
+    <!-- MAIN GRID: form -->
+    <div class="grid grid-cols-1 gap-8 mb-16" style="max-width:720px;margin-left:auto;margin-right:auto;">
 
       <!-- CONTACT FORM -->
       <div class="glass-card p-8" style="animation:fadein 0.5s 0.1s ease both;opacity:0;">
@@ -228,21 +228,6 @@
           <input type="email" id="email" class="form-input" placeholder="alex@example.com" />
         </div>
 
-        <!-- Subject Category -->
-        <div class="form-group">
-          <label class="form-label">Topic *</label>
-          <select id="topic" class="form-input">
-            <option value="" disabled selected style="color:#3a5a70;">— Select a topic —</option>
-            <option value="bug">🐞 Bug Report</option>
-            <option value="feature">💡 Feature Request</option>
-            <option value="data">📊 Data / Forecast Inquiry</option>
-            <option value="api">🔌 API Access</option>
-            <option value="partnership">🤝 Partnership / Business</option>
-            <option value="press">📰 Press / Media</option>
-            <option value="other">💬 General Inquiry</option>
-          </select>
-        </div>
-
         <!-- Subject line -->
         <div class="form-group">
           <label class="form-label">Subject *</label>
@@ -253,12 +238,6 @@
         <div class="form-group">
           <label class="form-label">Message *</label>
           <textarea id="message" class="form-input" placeholder="Please describe your inquiry in detail. For bug reports, include the instrument, browser, and steps to reproduce."></textarea>
-        </div>
-
-        <!-- Optional: attach symbol -->
-        <div class="form-group">
-          <label class="form-label">Related Symbol <span style="color:#4a7090;font-size:9px;">(optional)</span></label>
-          <input type="text" id="symbol" class="form-input" placeholder="e.g. BTC, AAPL, EURUSD" style="text-transform:uppercase;" />
         </div>
 
         <!-- Validation error -->
@@ -276,75 +255,6 @@
         </div>
       </div>
 
-      <!-- SIDEBAR -->
-      <div>
-        <!-- Contact Info -->
-        <div style="animation:fadein 0.5s 0.18s ease both;opacity:0;margin-bottom:12px;">
-          <div class="info-card">
-            <div style="display:flex;gap:12px;align-items:center;">
-              <div style="width:36px;height:36px;border-radius:9px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">📧</div>
-              <div>
-                <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#7aadc8;letter-spacing:0.08em;margin-bottom:3px;">EMAIL</div>
-                <div style="font-size:13px;color:#eaf6ff;font-weight:500;">hello@fininteger.io</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="info-card purple">
-            <div style="display:flex;gap:12px;align-items:center;">
-              <div style="width:36px;height:36px;border-radius:9px;background:rgba(136,153,255,0.1);border:1px solid rgba(136,153,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🐙</div>
-              <div>
-                <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#7aadc8;letter-spacing:0.08em;margin-bottom:3px;">GITHUB</div>
-                <div style="font-size:13px;color:#eaf6ff;font-weight:500;">github.com/fininteger</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="info-card">
-            <div style="display:flex;gap:12px;align-items:center;">
-              <div style="width:36px;height:36px;border-radius:9px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🐦</div>
-              <div>
-                <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#7aadc8;letter-spacing:0.08em;margin-bottom:3px;">TWITTER / X</div>
-                <div style="font-size:13px;color:#eaf6ff;font-weight:500;">@main_app</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="info-card purple">
-            <div style="display:flex;gap:12px;align-items:center;">
-              <div style="width:36px;height:36px;border-radius:9px;background:rgba(136,153,255,0.1);border:1px solid rgba(136,153,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">⏱️</div>
-              <div>
-                <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#7aadc8;letter-spacing:0.08em;margin-bottom:3px;">RESPONSE TIME</div>
-                <div style="font-size:13px;color:#eaf6ff;font-weight:500;">Within 24 hours</div>
-                <div style="font-size:11px;color:#8ab0cc;margin-top:2px;">Mon–Fri · UTC+0</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- System Status -->
-        <div class="glass-card p-5" style="animation:fadein 0.5s 0.26s ease both;opacity:0;margin-bottom:12px;">
-          <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#7aadc8;letter-spacing:0.1em;margin-bottom:14px;font-weight:700;">⚡ SYSTEM STATUS</div>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:12px;color:#8ab0cc;">API & Data Feed</span>
-              <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#00ff88;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);padding:2px 9px;border-radius:20px;">OPERATIONAL</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:12px;color:#8ab0cc;">XGBoost Engine</span>
-              <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#00ff88;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);padding:2px 9px;border-radius:20px;">OPERATIONAL</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:12px;color:#8ab0cc;">Dashboard UI</span>
-              <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#00ff88;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);padding:2px 9px;border-radius:20px;">OPERATIONAL</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:12px;color:#8ab0cc;">Portfolio Tracker</span>
-              <span style="font-size:10px;font-family:'JetBrains Mono',monospace;color:#00ff88;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);padding:2px 9px;border-radius:20px;">OPERATIONAL</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="gradient-divider"></div>
@@ -373,7 +283,7 @@
             <span class="faq-arrow">▾</span>
           </div>
           <div class="faq-answer">
-            fininteger exposes REST endpoints for price data and XGBoost forecasts (e.g. <code style="font-family:'JetBrains Mono',monospace;color:#00d4ff;font-size:11px;">/api/forecast/BTC/</code>). Direct API access for third-party integrations is available — reach out via the contact form with topic "API Access".
+            fininteger exposes REST endpoints for price data and XGBoost forecasts (e.g. <code style="font-family:'JetBrains Mono',monospace;color:#00d4ff;font-size:11px;">/api/forecast/BTC/</code>). Direct API access for third-party integrations is available — reach out via the contact form.
           </div>
         </div>
 
@@ -413,7 +323,7 @@
             <span class="faq-arrow">▾</span>
           </div>
           <div class="faq-answer">
-            Absolutely. Select "Feature Request" from the topic dropdown and describe what you'd like to see. We prioritize additions based on user demand, so the more specific your request, the better chance it has of making it into the next release.
+            Absolutely. Send us a message describing what you'd like to see. We prioritize additions based on user demand, so the more specific your request, the better chance it has of making it into the next release.
           </div>
         </div>
       </div>
@@ -424,7 +334,7 @@
   <!-- FOOTER -->
   <footer style="border-top:1px solid #0d2035;background:#030710;padding:20px 24px;text-align:center;">
     <span style="font-size:10px;color:#7aadc8;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;">
-      fininteger © 2025 · XGBoost-Powered Financial Intelligence · <a href="/about/" style="color:#00d4ff;text-decoration:none;">About</a> · <a href="/contact/" style="color:#00d4ff;text-decoration:none;">Contact</a>
+      fininteger © 2025 · AI Based Financial Adviser · <a href="/about/" style="color:#00d4ff;text-decoration:none;">About</a> · <a href="/contact/" style="color:#00d4ff;text-decoration:none;">Contact</a>
     </span>
   </footer>
 
@@ -445,7 +355,6 @@
       const fname = document.getElementById('fname').value.trim();
       const lname = document.getElementById('lname').value.trim();
       const email = document.getElementById('email').value.trim();
-      const topic = document.getElementById('topic').value;
       const subject = document.getElementById('subject').value.trim();
       const message = document.getElementById('message').value.trim();
 
@@ -455,7 +364,6 @@
       // Validation
       if (!fname || !lname) { showError('Please enter your first and last name.'); return; }
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address.'); return; }
-      if (!topic) { showError('Please select a topic.'); return; }
       if (!subject) { showError('Please enter a subject.'); return; }
       if (message.length < 20) { showError('Please provide a more detailed message (at least 20 characters).'); return; }
 
@@ -468,10 +376,9 @@
         btn.style.display = 'none';
         document.getElementById('success-banner').style.display = 'block';
         // Reset form
-        ['fname','lname','email','subject','message','symbol'].forEach(id => {
+        ['fname','lname','email','subject','message'].forEach(id => {
           document.getElementById(id).value = '';
         });
-        document.getElementById('topic').selectedIndex = 0;
       }, 1200);
     }
 
