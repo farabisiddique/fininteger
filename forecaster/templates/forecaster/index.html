@@ -32,7 +32,7 @@
   </script>
   <style>
     * { box-sizing:border-box; margin:0; padding:0; }
-    html { font-size: 100%; }
+    html { zoom: 1.25; }
     body { background:#050a0e; font-family:'Poppins',system-ui,sans-serif; color:#c8dde8; overflow:hidden; height:100vh; }
     ::-webkit-scrollbar { width:4px; height:4px; }
     ::-webkit-scrollbar-track { background:#050a0e; }
@@ -98,14 +98,14 @@
     .forecast-chg { font-size:11px; font-weight:700; margin-bottom:6px; }
     .forecast-conf { font-size:9px; color:#8ab0cc; }
     .forecast-loader { display:none; width:20px; height:20px; border:2px solid transparent; border-top-color:#00d4ff; border-radius:50%; animation:ai-spin .7s linear infinite; margin:auto; }
-    .nav-link { font-size:10px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
+    .nav-link { font-size:12px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
     .nav-link:hover, .nav-link.active { color:#00d4ff; }
     .nav-link.active { font-weight:700; }
     /* LIGHT MODE (invert + hue-rotate keeps brand hues; images counter-inverted) */
     html.light-mode { filter: invert(1) hue-rotate(180deg); background:#fbfbfd; }
     html.light-mode img { filter: invert(1) hue-rotate(180deg); }
-    .theme-btn { background:none; border:1px solid #1a3a5c; border-radius:6px; padding:3px 10px; cursor:pointer;
-                 font-size:9px; letter-spacing:0.08em; color:#8ab0cc; font-family:'JetBrains Mono',monospace;
+    .theme-btn { background:none; border:1px solid #1a3a5c; border-radius:6px; padding:5px 13px; cursor:pointer;
+                 font-size:11px; letter-spacing:0.08em; color:#8ab0cc; font-family:'JetBrains Mono',monospace;
                  transition:color .15s,border-color .15s; }
     .theme-btn:hover { color:#00d4ff; border-color:#00d4ff; }
   </style>
@@ -119,10 +119,10 @@
 <body class="flex flex-col h-screen overflow-hidden bg-bg text-textd font-mono">
 
   <!-- TOP NAV -->
-  <header class="flex items-center justify-between px-6 h-[52px] border-b border-border bg-surface shrink-0">
+  <header class="flex items-center justify-between px-6 h-[64px] border-b border-border bg-surface shrink-0">
     <div class="flex items-center gap-3">
-      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger — home" style="height:34px;width:auto;border-radius:6px;"></a>
-      <span class="text-[9px] border-l border-border pl-3 tracking-[0.1em]" style="color:#7aadc8">AI Based Financial Adviser</span>
+      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger — home" style="height:46px;width:auto;border-radius:8px;"></a>
+      <span class="text-[11px] border-l border-border pl-3 tracking-[0.1em]" style="color:#7aadc8">AI Based Financial Adviser</span>
     </div>
     <nav class="flex items-center gap-6">
       <a href="/" class="nav-link active">HOME</a>
@@ -136,10 +136,10 @@
     <div class="flex items-center gap-5">
       <button id="theme-toggle" class="theme-btn" title="Toggle light / dark mode">LIGHT</button>
       <div class="flex items-center gap-1.5">
-        <div class="live-dot w-1.5 h-1.5 rounded-full bg-gain"></div>
-        <span class="text-[9px] text-gain tracking-[0.1em]">LIVE</span>
+        <div class="live-dot w-2 h-2 rounded-full bg-gain"></div>
+        <span class="text-[11px] text-gain tracking-[0.1em]">LIVE</span>
       </div>
-      <span id="clock" class="text-[9px] text-textdim"></span>
+      <span id="clock" class="text-[11px] text-textdim"></span>
     </div>
   </header>
   <script>

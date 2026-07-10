@@ -22,7 +22,7 @@
   </script>
   <style>
     * { box-sizing:border-box; margin:0; padding:0; }
-    html { font-size: 100%; }
+    html { zoom: 1.25; }
     body { background:#050a0e; font-family:'Poppins',system-ui,sans-serif; color:#c8dde8; min-height:100vh; }
     ::-webkit-scrollbar { width:4px; } ::-webkit-scrollbar-track { background:#050a0e; }
     ::-webkit-scrollbar-thumb { background:#0d2035; border-radius:2px; }
@@ -80,14 +80,14 @@
     .alloc-fill { height:100%;border-radius:2px; }
     .tag { font-size:8px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:.06em; }
     .empty-state { text-align:center;padding:40px 20px;color:#7aadc8;font-size:11px; }
-    .nav-link { font-size:10px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
+    .nav-link { font-size:12px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
     .nav-link:hover, .nav-link.active { color:#00d4ff; }
     .nav-link.active { font-weight:700; }
     /* LIGHT MODE (invert + hue-rotate keeps brand hues; images counter-inverted) */
     html.light-mode { filter: invert(1) hue-rotate(180deg); background:#fbfbfd; }
     html.light-mode img { filter: invert(1) hue-rotate(180deg); }
-    .theme-btn { background:none; border:1px solid #1a3a5c; border-radius:6px; padding:3px 10px; cursor:pointer;
-                 font-size:9px; letter-spacing:0.08em; color:#8ab0cc; font-family:'JetBrains Mono',monospace;
+    .theme-btn { background:none; border:1px solid #1a3a5c; border-radius:6px; padding:5px 13px; cursor:pointer;
+                 font-size:11px; letter-spacing:0.08em; color:#8ab0cc; font-family:'JetBrains Mono',monospace;
                  transition:color .15s,border-color .15s; }
     .theme-btn:hover { color:#00d4ff; border-color:#00d4ff; }
   </style>
@@ -102,11 +102,11 @@
   <div class="bg-mesh"></div>
 
   <!-- NAV -->
-  <header class="flex items-center justify-between px-6 h-[52px] border-b border-border shrink-0 sticky top-0 z-50"
+  <header class="flex items-center justify-between px-6 h-[64px] border-b border-border shrink-0 sticky top-0 z-50"
           style="background:rgba(5,10,14,0.92);backdrop-filter:blur(20px);">
     <div class="flex items-center gap-3">
-      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger — home" style="height:34px;width:auto;border-radius:6px;"></a>
-      <span class="text-[9px] text-textdim border-l border-border pl-3 tracking-[0.1em]">AI Based Financial Adviser</span>
+      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger — home" style="height:46px;width:auto;border-radius:8px;"></a>
+      <span class="text-[11px] text-textdim border-l border-border pl-3 tracking-[0.1em]">AI Based Financial Adviser</span>
     </div>
     <nav class="flex items-center gap-6">
       <a href="/" class="nav-link">HOME</a>
@@ -120,10 +120,10 @@
     <div class="flex items-center gap-5">
       <button id="theme-toggle" class="theme-btn" title="Toggle light / dark mode">LIGHT</button>
       <div class="flex items-center gap-1.5">
-        <div class="live-dot w-1.5 h-1.5 rounded-full bg-gain"></div>
-        <span class="text-[9px] text-gain tracking-[0.1em]">LIVE</span>
+        <div class="live-dot w-2 h-2 rounded-full bg-gain"></div>
+        <span class="text-[11px] text-gain tracking-[0.1em]">LIVE</span>
       </div>
-      <span id="clock" class="text-[9px] text-textdim"></span>
+      <span id="clock" class="text-[11px] text-textdim"></span>
     </div>
   </header>
   <script>
@@ -147,7 +147,7 @@
 
 
   <!-- TICKER -->
-  <div class="ticker-wrap shrink-0 border-b border-border py-1.5 sticky top-[52px] z-40" style="background:#030710">
+  <div class="ticker-wrap shrink-0 border-b border-border py-1.5 sticky top-[64px] z-40" style="background:#030710">
     <div class="ticker-inner text-[10px] tracking-[0.04em]" id="ticker-inner"></div>
   </div>
 
