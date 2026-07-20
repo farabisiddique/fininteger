@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fininteger — Contact Us</title>
+  <title>fininteger - Contact Us</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <script>
@@ -157,7 +157,7 @@
   <!-- TOP NAV -->
   <header class="flex items-center justify-between px-6 h-[64px] border-b sticky top-0 z-50" style="border-color:#0d2035;background:#07101a;">
     <div class="flex items-center gap-3">
-      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger — home" style="height:46px;width:auto;border-radius:8px;"></a>
+      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger - home" style="height:46px;width:auto;border-radius:8px;"></a>
       <span style="font-size:11px;color:#7aadc8;border-left:1px solid #0d2035;padding-left:12px;letter-spacing:0.1em;font-family:'JetBrains Mono',monospace;">AI Based Financial Adviser</span>
     </div>
     <nav class="flex items-center gap-6">
@@ -226,7 +226,7 @@
         We'd love to hear from you
       </h1>
       <p style="font-size:15px;color:#8ab0cc;max-width:500px;margin:0 auto;line-height:1.8;font-weight:300;">
-        Whether it's a bug report, feature suggestion, data inquiry, or partnership proposal — our team responds within 24 hours.
+        Whether it's a bug report, feature suggestion, data inquiry, or partnership proposal - our team responds within 24 hours.
       </p>
     </div>
 
@@ -280,7 +280,7 @@
         <div id="success-banner">
           <div style="font-size:22px;margin-bottom:6px;">✅</div>
           <div style="font-size:14px;font-weight:600;color:#00ff88;margin-bottom:4px;">Message sent successfully!</div>
-          <div style="font-size:12px;color:#8ab0cc;">Thank you — we'll get back to you within 24 hours.</div>
+          <div style="font-size:12px;color:#8ab0cc;">Thank you - we'll get back to you within 24 hours.</div>
         </div>
       </div>
 
@@ -302,19 +302,11 @@
             <span class="faq-arrow">▾</span>
           </div>
           <div class="faq-answer">
-            Prices are refreshed every 12 minutes, aligned to Yahoo Finance's yfinance data pipeline which typically updates every 10 minutes. The XGBoost forecasts are cached for 10 minutes per symbol and regenerated on the next request after expiry.
+            Prices are refreshed about every minute from Yahoo Finance. The AI forecasts are cached for 10 minutes per symbol and regenerated on the next request after expiry.
           </div>
         </div>
 
-        <div class="faq-item" onclick="toggleFaq(this)">
-          <div class="faq-question">
-            <span>Can I access the fininteger API directly?</span>
-            <span class="faq-arrow">▾</span>
-          </div>
-          <div class="faq-answer">
-            fininteger exposes REST endpoints for price data and XGBoost forecasts (e.g. <code style="font-family:'JetBrains Mono',monospace;color:#00d4ff;font-size:11px;">/api/forecast/BTC/</code>). Direct API access for third-party integrations is available — reach out via the contact form.
-          </div>
-        </div>
+        
 
         <div class="faq-item" onclick="toggleFaq(this)">
           <div class="faq-question">
@@ -332,8 +324,7 @@
             <span class="faq-arrow">▾</span>
           </div>
           <div class="faq-answer">
-            fininteger currently supports 20+ instruments across 5 asset classes: Crypto (BTC, ETH, SOL, BNB, XRP), Stocks (AAPL, NVDA, MSFT, TSLA, AMZN), Commodities (XAU, XAG, OIL, NG), ETFs (SPY, QQQ, VTI), and Forex (EUR/USD, GBP/USD, USD/JPY). More instruments are added regularly.
-          </div>
+            fininteger currently supports 10 instruments across 5 asset classes: Crypto (BTC, ETH, SOL), Stocks (AAPL, NVDA, TSLA), Commodities (Gold, Crude Oil), ETFs (SPY), and Forex (EUR/USD). More instruments are added based on demand.</div>
         </div>
 
         <div class="faq-item" onclick="toggleFaq(this)">
@@ -363,14 +354,14 @@
   <!-- FOOTER -->
   <footer style="border-top:1px solid #0d2035;background:#030710;padding:20px 24px;text-align:center;">
     <span style="font-size:10px;color:#7aadc8;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;">
-      fininteger © 2025 · AI Based Financial Adviser · <a href="/about/" style="color:#00d4ff;text-decoration:none;">About</a> · <a href="/contact/" style="color:#00d4ff;text-decoration:none;">Contact</a>
+      fininteger © <span class="js-year">2026</span> · AI Based Financial Adviser
     </span>
   </footer>
 
   <script>
     // CLOCK
     function updateClock() {
-      document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB',{timeZone:'UTC'}) + ' UTC';
+      document.getElementById('clock').textContent = new Date().toLocaleTimeString([],{hour12:false,timeZoneName:'short'});
     }
     updateClock(); setInterval(updateClock, 1000);
 
@@ -417,5 +408,6 @@
       el.style.display = 'block';
     }
   </script>
+  <script>document.querySelectorAll(".js-year").forEach(function(el){el.textContent=new Date().getFullYear();});</script>
 </body>
 </html>

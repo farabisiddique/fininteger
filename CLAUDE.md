@@ -64,7 +64,11 @@ Verify after deploy: `curl http://127.0.0.1:8000/health` on the server, then spo
 
 Models are trained per-request (nothing persisted); the SQLite cache is the only thing keeping this responsive.
 
-**Price history for charts:** `GET /api/history/{symbol}?range=1mo|3mo|6mo|1y` returns daily OHLCV (`ml_engine.history_with_fallback`, same demo-fallback pattern), cached in an in-process dict (600s, per worker — not SQLite). The dashboard chart is TradingView Lightweight Charts v4 (pinned via unpkg CDN in `index.html`) with five chart-type tabs (candles/bars/line/area/baseline) + volume histogram; its data shape is `{time: "YYYY-MM-DD", open, high, low, close, volume}` — keep `_demo_history` and `schemas.Candle` in sync with it.
+**Price history for charts:** `GET /api/history/{symbol}?range=1d|5d|1mo|6mo` (Yahoo-style ranges; 1d/5d are intraday 5m/30m bars with epoch-seconds `time`, 1mo/6mo daily bars with `"YYYY-MM-DD"` `time`), via `ml_engine.history_with_fallback` (same demo-fallback pattern), cached in an in-process dict (600s, per worker — not SQLite). The dashboard chart is TradingView Lightweight Charts v4 (pinned via unpkg CDN in `index.html`), default **area + 1D**, with five chart-type tabs + volume histogram — keep `_demo_history` and `schemas.Candle` in sync with the candle shape.
+
+**Live quotes:** `GET /api/price/{symbol}` returns `{price, change}` (24h % vs previous close) via `ml_engine.live_quote`, cached in-process for 60s — that cache is what lets the frontend poll every 60s (dashboard sidebar/ticker and the whole markets page re-render from it) without hammering Yahoo. Seeded DB prices/changes are only placeholders until the first refresh lands.
+
+**The instrument universe is intentionally 10 symbols** (3 crypto, 3 stocks, 2 commodities, 1 ETF, 1 forex). User-visible copy must never mention XGBoost (branding says "AI"), em dashes are banned in site copy, and clocks render in the viewer's local timezone.
 
 **API endpoints are sync `def` on purpose** — model training and yfinance calls block for seconds, so FastAPI must run them in its threadpool. Don't convert them to `async def` without moving the blocking work to an executor.
 

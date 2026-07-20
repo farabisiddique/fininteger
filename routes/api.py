@@ -12,6 +12,7 @@ from schemas import InstrumentsListResponse, PriceResponse, ForecastData, Histor
 from forecaster.ml_engine import (
     forecast_with_fallback as forecast,
     history_with_fallback,
+    live_quote,
     HISTORY_PERIODS,
     SYMBOL_MAP,
 )
@@ -68,7 +69,7 @@ HISTORY_CACHE_TTL = 600
 
 
 @router.get("/history/{symbol}", response_model=HistoryData)
-def api_history(symbol: str, range: str = "3mo"):
+def api_history(symbol: str, range: str = "1mo"):
     """Daily OHLCV history for the dashboard charts (sync def → threadpool)."""
     symbol = symbol.upper()
 
@@ -97,19 +98,28 @@ async def api_instruments(db: Session = Depends(get_db)):
     return InstrumentsListResponse(instruments=instruments)
 
 
+# Short in-memory price cache so frequent frontend polling never hammers Yahoo.
+_price_cache: dict = {}
+PRICE_CACHE_TTL = 60
+
+
 @router.get("/price/{symbol}", response_model=PriceResponse)
 def api_price(symbol: str):
-    """Get current price for a symbol from yfinance (sync def → threadpool)."""
+    """Current price + 24h change, cached 60s (sync def → threadpool)."""
     symbol = symbol.upper()
-    
+
     if symbol not in SYMBOL_MAP:
         raise HTTPException(status_code=404, detail="Unknown symbol")
-    
+
+    hit = _price_cache.get(symbol)
+    if hit and hit[0] > datetime.utcnow():
+        return hit[1]
+
     try:
-        ticker = yf.Ticker(SYMBOL_MAP[symbol])
-        info = ticker.fast_info
-        price = info.last_price
-        return PriceResponse(symbol=symbol, price=round(price, 6))
+        result = live_quote(symbol)
     except Exception as e:
         logger.exception(f"Price fetch failed for {symbol}")
         raise HTTPException(status_code=500, detail=str(e))
+
+    _price_cache[symbol] = (datetime.utcnow() + timedelta(seconds=PRICE_CACHE_TTL), result)
+    return result

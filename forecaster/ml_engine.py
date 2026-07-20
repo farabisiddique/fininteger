@@ -20,78 +20,25 @@ logger = logging.getLogger(__name__)
 
 # ── Symbol mapping: internal ID → yfinance ticker ─────────────────────────────
 SYMBOL_MAP = {
-    # Crypto
     "BTC":    "BTC-USD",
     "ETH":    "ETH-USD",
     "SOL":    "SOL-USD",
-    "BNB":    "BNB-USD",
-    "XRP":    "XRP-USD",
-    "ADA":    "ADA-USD",
-    "DOGE":   "DOGE-USD",
-    "DOT":    "DOT-USD",
-    "AVAX":   "AVAX-USD",
-    "LINK":   "LINK-USD",
-    "LTC":    "LTC-USD",
-    "TRX":    "TRX-USD",
-    # Stocks
     "AAPL":   "AAPL",
     "NVDA":   "NVDA",
-    "MSFT":   "MSFT",
     "TSLA":   "TSLA",
-    "AMZN":   "AMZN",
-    "GOOGL":  "GOOGL",
-    "META":   "META",
-    "NFLX":   "NFLX",
-    "AMD":    "AMD",
-    "INTC":   "INTC",
-    "JPM":    "JPM",
-    "V":      "V",
-    # Commodities (futures)
     "XAU":    "GC=F",
-    "XAG":    "SI=F",
     "OIL":    "CL=F",
-    "NG":     "NG=F",
-    "HG":     "HG=F",
-    "PL":     "PL=F",
-    "PA":     "PA=F",
-    "ZC":     "ZC=F",
-    "ZW":     "ZW=F",
-    "ZS":     "ZS=F",
-    "KC":     "KC=F",
-    "SB":     "SB=F",
-    "CT":     "CT=F",
-    "CC":     "CC=F",
-    # ETFs
     "SPY":    "SPY",
-    "QQQ":    "QQQ",
-    "VTI":    "VTI",
-    "IWM":    "IWM",
-    "DIA":    "DIA",
-    "EFA":    "EFA",
-    "GLD":    "GLD",
-    "XLK":    "XLK",
-    "XLF":    "XLF",
-    "ARKK":   "ARKK",
-    # Forex
     "EURUSD": "EURUSD=X",
-    "GBPUSD": "GBPUSD=X",
-    "USDJPY": "USDJPY=X",
-    "AUDUSD": "AUDUSD=X",
-    "USDCAD": "USDCAD=X",
-    "USDCHF": "USDCHF=X",
-    "NZDUSD": "NZDUSD=X",
-    "EURGBP": "EURGBP=X",
-    "EURJPY": "EURJPY=X",
-    "GBPJPY": "GBPJPY=X",
 }
 
 # Forecast horizons in trading days
 HORIZONS = {"1d": 1, "1w": 5, "1m": 21}
 
 
-def _fetch_ohlcv(ticker: str, period: str = "2y") -> pd.DataFrame:
+def _fetch_ohlcv(ticker: str, period: str = "2y", interval: str = "1d") -> pd.DataFrame:
     """Download OHLCV data from yfinance."""
-    data = yf.download(ticker, period=period, interval="1d", progress=False, auto_adjust=True)
+    data = yf.download(ticker, period=period, interval=interval, progress=False, auto_adjust=True)
     if data.empty:
         raise ValueError(f"No data returned for {ticker}")
     data.columns = [c[0] if isinstance(c, tuple) else c for c in data.columns]
@@ -370,21 +317,29 @@ def forecast(symbol_id: str) -> dict:
 
 
 # ── Price history (for the dashboard charts) ──────────────────────────────────
-HISTORY_PERIODS = {"1mo": 22, "3mo": 66, "6mo": 132, "1y": 260}  # → trading days (demo)
+# Yahoo-style ranges: range key → (yfinance period, interval, intraday?)
+HISTORY_PERIODS = {
+    "1d":  ("1d",  "5m",  True),
+    "5d":  ("5d",  "30m", True),
+    "1mo": ("1mo", "1d",  False),
+    "6mo": ("6mo", "1d",  False),
+}
 
 
-def fetch_history(symbol_id: str, period: str = "3mo") -> dict:
-    """Daily OHLCV history shaped for TradingView Lightweight Charts."""
+def fetch_history(symbol_id: str, period: str = "1mo") -> dict:
+    """OHLCV history shaped for TradingView Lightweight Charts.
+    Daily ranges use 'YYYY-MM-DD' times; intraday ranges use epoch seconds."""
     ticker = SYMBOL_MAP.get(symbol_id)
     if not ticker:
         raise ValueError(f"Unknown symbol: {symbol_id}")
     if period not in HISTORY_PERIODS:
         raise ValueError(f"Invalid period: {period}")
 
-    raw = _fetch_ohlcv(ticker, period=period)
+    yf_period, yf_interval, intraday = HISTORY_PERIODS[period]
+    raw = _fetch_ohlcv(ticker, period=yf_period, interval=yf_interval)
     candles = [
         {
-            "time": idx.strftime("%Y-%m-%d"),
+            "time": int(idx.timestamp()) if intraday else idx.strftime("%Y-%m-%d"),
             "open": float(row["Open"]),
             "high": float(row["High"]),
             "low": float(row["Low"]),
@@ -396,26 +351,35 @@ def fetch_history(symbol_id: str, period: str = "3mo") -> dict:
     return {"symbol": symbol_id, "period": period, "demo_mode": False, "candles": candles}
 
 
-def _demo_history(symbol_id: str, period: str = "3mo") -> dict:
+def _demo_history(symbol_id: str, period: str = "1mo") -> dict:
     """Deterministic random-walk OHLCV when yfinance is unreachable."""
-    days = HISTORY_PERIODS.get(period, 66)
+    _, _, intraday = HISTORY_PERIODS.get(period, ("1mo", "1d", False))
     rng = random.Random(f"{symbol_id}:{period}")
     base = BASE_PRICES.get(symbol_id, 100.0)
 
+    if intraday:
+        n = 78 if period == "1d" else 65          # ~6.5h of 5m bars / 5d of 30m bars
+        step = timedelta(minutes=5 if period == "1d" else 30)
+        vol_scale = 0.004
+    else:
+        n = 22 if period == "1mo" else 132
+        step = timedelta(days=1)
+        vol_scale = 0.03
+
     candles = []
-    price = base * (1 - rng.uniform(0.02, 0.15))  # start below current, walk toward it
-    day = datetime.utcnow() - timedelta(days=int(days * 1.45))
-    while len(candles) < days:
-        day += timedelta(days=1)
-        if day.weekday() >= 5:  # skip weekends like real daily bars
+    price = base * (1 - rng.uniform(0.01, 0.12))
+    t = datetime.utcnow() - step * int(n * 1.45)
+    while len(candles) < n:
+        t += step
+        if not intraday and t.weekday() >= 5:      # skip weekends on daily bars
             continue
-        drift = (rng.random() - 0.48) * 0.03
+        drift = (rng.random() - 0.48) * vol_scale
         o = price
         c = price * (1 + drift)
-        hi = max(o, c) * (1 + rng.uniform(0, 0.012))
-        lo = min(o, c) * (1 - rng.uniform(0, 0.012))
+        hi = max(o, c) * (1 + rng.uniform(0, vol_scale / 2.5))
+        lo = min(o, c) * (1 - rng.uniform(0, vol_scale / 2.5))
         candles.append({
-            "time": day.strftime("%Y-%m-%d"),
+            "time": int(t.timestamp()) if intraday else t.strftime("%Y-%m-%d"),
             "open": round(o, 6), "high": round(hi, 6),
             "low": round(lo, 6), "close": round(c, 6),
             "volume": float(rng.randint(10_000, 900_000)),
@@ -424,7 +388,7 @@ def _demo_history(symbol_id: str, period: str = "3mo") -> dict:
     return {"symbol": symbol_id, "period": period, "demo_mode": True, "candles": candles}
 
 
-def history_with_fallback(symbol_id: str, period: str = "3mo") -> dict:
+def history_with_fallback(symbol_id: str, period: str = "1mo") -> dict:
     """Tries real yfinance history; falls back to demo data on network error."""
     try:
         return fetch_history(symbol_id, period)
@@ -433,24 +397,30 @@ def history_with_fallback(symbol_id: str, period: str = "3mo") -> dict:
         return _demo_history(symbol_id, period)
 
 
+def live_quote(symbol_id: str) -> dict:
+    """Last price + 24h change via yfinance fast_info."""
+    ticker = SYMBOL_MAP.get(symbol_id)
+    if not ticker:
+        raise ValueError(f"Unknown symbol: {symbol_id}")
+    info = yf.Ticker(ticker).fast_info
+    price = float(info.last_price)
+    change = None
+    try:
+        prev = float(info.previous_close)
+        if prev:
+            change = round((price - prev) / prev * 100, 2)
+    except Exception:
+        pass
+    return {"symbol": symbol_id, "price": round(price, 6), "change": change}
+
+
 # ── Demo / offline fallback ────────────────────────────────────────────────────
 import random
 
 BASE_PRICES = {
-    "BTC":67420.50,"ETH":3842.10,"SOL":182.45,"BNB":598.30,"XRP":0.621,
-    "ADA":0.452,"DOGE":0.1385,"DOT":6.84,"AVAX":28.90,"LINK":14.25,
-    "LTC":84.15,"TRX":0.124,
-    "AAPL":228.35,"NVDA":875.20,"MSFT":418.90,"TSLA":242.10,"AMZN":196.45,
-    "GOOGL":178.35,"META":512.20,"NFLX":645.80,"AMD":162.45,"INTC":30.85,
-    "JPM":198.50,"V":275.60,
-    "XAU":2312.40,"XAG":27.84,"OIL":78.92,"NG":2.145,"HG":4.485,
-    "PL":968.40,"PA":942.60,"ZC":452.25,"ZW":568.50,"ZS":1182.75,
-    "KC":228.85,"SB":19.42,"CT":71.28,"CC":7845.00,
-    "SPY":542.10,"QQQ":468.35,"VTI":248.90,"IWM":201.35,"DIA":392.80,
-    "EFA":78.95,"GLD":214.50,"XLK":228.70,"XLF":41.85,"ARKK":44.62,
-    "EURUSD":1.0842,"GBPUSD":1.271,"USDJPY":151.84,"AUDUSD":0.6648,
-    "USDCAD":1.3712,"USDCHF":0.8985,"NZDUSD":0.6112,"EURGBP":0.853,
-    "EURJPY":164.62,"GBPJPY":193.05,
+    "BTC":67420.50,"ETH":3842.10,"SOL":182.45,
+    "AAPL":228.35,"NVDA":875.20,"TSLA":242.10,
+    "XAU":2312.40,"OIL":78.92,"SPY":542.10,"EURUSD":1.0842,
 }
 
 def _demo_forecast(symbol_id: str) -> dict:

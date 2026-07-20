@@ -1,0 +1,101 @@
+﻿Fininteger Changes
+
+
+1. Remove all em dash
+2. Not Dashboard, it’s home
+3. Only 10 instruments
+4. Remove all XGBoost mentioning
+5. Remove 2 years
+6. User tour er highlight je kore okhane navbar er oi highlight er padding barate hobe
+7. Step 4 e investing skill (instead education) er bodle hobe
+8. Important disclaimer er bodle only disclaimer hobe 
+9. Sidebar e price e current price hobe (not open price)
+10. Sidebar e price auto reload hocche na
+11. Navbar gayeb hoye jay
+12. Increase decrease percentage wrong
+13. Yahoo finance 1D, 5D, ranges follow
+14. Default chart will be area
+15. Scroll issue
+16. ? mark diye konta ki bujhar option asbe hover korle
+17. Icon gula falai dite hobe that smells like AI
+18. Markets page e price update hote hobe
+19. Timezone onujayi time show korbe
+20. Technology stack remove from about page
+21. FAQ no 2 remove
+22. 2025 na 26 hobe
+23. Footer e about, contact bad jabe
+
+
+
+
+
+
+
+
+# Make the site responsive
+# Show Time based on Time Zone
+# Remove XGBOOST from everywhere
+# Change the AI Icon before the XGBOOST PRICE FORECAST text
+# Change icons
+# Navbar disappearance issue
+# Scroll Issue - Gets Cropped
+# Logo: Refer to Mahedi's Photo in the IT Team whatsapp group
+
+
+# Home
+## Tour Pop-ups:
+- Welcome to fininteger:
+-- Change text: Your AI-powered market intelligence dashboard. This quick tour shows you around — it only takes 30 seconds.
+
+
+- Browse the markets
+-- Change text: 20 instruments > 10 instruments ; remove the word "Dashboard"
+
+
+- AI price forecasts
+-- Remove: "an XGBoost model", "2 years of"
+
+
+- Navbar Higlight during Tour: Increase Padding
+
+
+- Explore further: Goes out of the window. 
+-- Change text: "investing education for beginners" - Use your judgement
+
+
+- Important disclaimer:
+-- Change text: "Important disclaimer" > Disclaimer
+-- Remove Text: Before you start, please understand how to read this data:
+
+
+# Left Panel
+-- Financial Instrument Price Update Issue
+-- Increase-Decrease Percentage Wrong
+
+
+# Graph/Chart
+-- Add Time Horizon: 1D, 5D, 1M, 6M
+-- Default Graph/Chart: Area
+-- Remove the Boxes from the bottom
+
+
+## Market
+- Fix the price updates
+
+
+## About 
+- Remove Technology Stack Container/Card
+- Remove "Can I access the fininteger API directly?"
+
+
+## Contact 
+- Create a gmail and add in the 
+
+
+## Footer
+- Make the Year Dynamic
+- Remove About and Contact
+
+
+## Add in the Disclaimer
+- Add something like: Fininteger will not take any responsibility for the outcome........

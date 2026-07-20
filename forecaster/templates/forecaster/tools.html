@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fininteger — Financial Tools</title>
+  <title>fininteger - Financial Tools</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <script>
@@ -290,7 +290,7 @@
   <header class="flex items-center justify-between px-6 h-[64px] border-b border-border shrink-0 sticky top-0 z-50"
           style="background:rgba(5,10,14,0.92);backdrop-filter:blur(20px);">
     <div class="flex items-center gap-3">
-      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger — home" style="height:46px;width:auto;border-radius:8px;"></a>
+      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger - home" style="height:46px;width:auto;border-radius:8px;"></a>
       <span class="text-[11px] text-textdim border-l border-border pl-3 tracking-[0.1em]">AI Based Financial Adviser</span>
     </div>
     <nav class="flex items-center gap-6">
@@ -368,7 +368,7 @@
       <div style="position:relative;display:inline-block;">
         <select id="tool-selector" onchange="document.getElementById(this.value).scrollIntoView({behavior:'smooth',block:'start'})"
           style="appearance:none;-webkit-appearance:none;background:rgba(10,21,32,0.95);border:1px solid rgba(0,212,255,0.3);border-radius:10px;padding:9px 40px 9px 16px;color:#eaf6ff;font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;cursor:pointer;min-width:280px;outline:none;letter-spacing:0.02em;box-shadow:0 4px 16px rgba(0,212,255,0.08);">
-          <option value="" style="background:#07101a;color:#7aadc8;">— Select a tool —</option>
+          <option value="" style="background:#07101a;color:#7aadc8;">- Select a tool -</option>
           <option value="tool-compound" style="background:#07101a">📈  Compound Interest Calculator</option>
           <option value="tool-sip" style="background:#07101a">💰  SIP Calculator</option>
           <option value="tool-loan" style="background:#07101a">🏦  Loan EMI Calculator</option>
@@ -425,12 +425,12 @@
         <button class="calc-btn w-full mt-4" onclick="calcCI()">CALCULATE GROWTH</button>
 
         <div class="result-box" id="ci-result" style="display:none">
-          <div class="breakdown-row"><span>Principal</span><span id="ci-r-principal">—</span></div>
-          <div class="breakdown-row"><span>Interest Earned</span><span id="ci-r-interest" style="color:#00ff88">—</span></div>
+          <div class="breakdown-row"><span>Principal</span><span id="ci-r-principal">-</span></div>
+          <div class="breakdown-row"><span>Interest Earned</span><span id="ci-r-interest" style="color:#00ff88">-</span></div>
           <div class="glass-divider"></div>
           <div class="field-label mt-2">FINAL AMOUNT</div>
-          <div class="result-val gain-col" id="ci-r-total">—</div>
-          <div class="text-[9px] text-textdim mt-1" id="ci-r-note">—</div>
+          <div class="result-val gain-col" id="ci-r-total">-</div>
+          <div class="text-[9px] text-textdim mt-1" id="ci-r-note">-</div>
         </div>
       </div>
 
@@ -466,12 +466,12 @@
         <button class="calc-btn gold w-full mt-4" onclick="calcSIP()">CALCULATE SIP</button>
 
         <div class="result-box" id="sip-result" style="display:none;border-color:rgba(255,184,0,0.15);background:rgba(255,184,0,0.04)">
-          <div class="breakdown-row"><span>Total Invested</span><span id="sip-r-invested">—</span></div>
-          <div class="breakdown-row"><span>Est. Returns</span><span id="sip-r-returns" style="color:#ffb800">—</span></div>
+          <div class="breakdown-row"><span>Total Invested</span><span id="sip-r-invested">-</span></div>
+          <div class="breakdown-row"><span>Est. Returns</span><span id="sip-r-returns" style="color:#ffb800">-</span></div>
           <div class="glass-divider"></div>
           <div class="field-label mt-2">TOTAL CORPUS</div>
-          <div class="result-val gold-col" id="sip-r-total">—</div>
-          <div class="text-[9px] text-textdim mt-1" id="sip-r-note">—</div>
+          <div class="result-val gold-col" id="sip-r-total">-</div>
+          <div class="text-[9px] text-textdim mt-1" id="sip-r-note">-</div>
         </div>
       </div>
 
@@ -513,13 +513,13 @@
         <button class="calc-btn loss w-full mt-4" onclick="calcEMI()">CALCULATE EMI</button>
 
         <div class="result-box" id="emi-result" style="display:none;border-color:rgba(255,51,102,0.15);background:rgba(255,51,102,0.04)">
-          <div class="breakdown-row"><span>Monthly EMI</span><span id="emi-r-emi" style="color:#ff3366;font-weight:800">—</span></div>
-          <div class="breakdown-row"><span>Total Payment</span><span id="emi-r-total">—</span></div>
-          <div class="breakdown-row"><span>Total Interest</span><span id="emi-r-interest" style="color:#ff3366">—</span></div>
+          <div class="breakdown-row"><span>Monthly EMI</span><span id="emi-r-emi" style="color:#ff3366;font-weight:800">-</span></div>
+          <div class="breakdown-row"><span>Total Payment</span><span id="emi-r-total">-</span></div>
+          <div class="breakdown-row"><span>Total Interest</span><span id="emi-r-interest" style="color:#ff3366">-</span></div>
           <div class="glass-divider"></div>
           <div class="field-label mt-2">EFFECTIVE COST</div>
-          <div class="result-val loss-col" id="emi-r-eff">—</div>
-          <div class="text-[9px] text-textdim mt-1" id="emi-r-note">—</div>
+          <div class="result-val loss-col" id="emi-r-eff">-</div>
+          <div class="text-[9px] text-textdim mt-1" id="emi-r-note">-</div>
         </div>
       </div>
 
@@ -558,12 +558,12 @@
         <button class="calc-btn gain w-full mt-4" onclick="calcPS()">CALCULATE POSITION</button>
 
         <div class="result-box" id="ps-result" style="display:none;border-color:rgba(0,255,136,0.15);background:rgba(0,255,136,0.04)">
-          <div class="breakdown-row"><span>Risk Amount ($)</span><span id="ps-r-risk" style="color:#ff3366">—</span></div>
-          <div class="breakdown-row"><span>Stop Distance</span><span id="ps-r-stop">—</span></div>
+          <div class="breakdown-row"><span>Risk Amount ($)</span><span id="ps-r-risk" style="color:#ff3366">-</span></div>
+          <div class="breakdown-row"><span>Stop Distance</span><span id="ps-r-stop">-</span></div>
           <div class="glass-divider"></div>
           <div class="field-label mt-2">POSITION SIZE (UNITS)</div>
-          <div class="result-val gain-col" id="ps-r-units">—</div>
-          <div class="text-[9px]  text-textdim mt-1" id="ps-r-value">—</div>
+          <div class="result-val gain-col" id="ps-r-units">-</div>
+          <div class="text-[9px]  text-textdim mt-1" id="ps-r-value">-</div>
         </div>
       </div>
 
@@ -605,12 +605,12 @@
         <button class="calc-btn purple w-full mt-4" onclick="calcRR()">ANALYZE TRADE</button>
 
         <div class="result-box" id="rr-result" style="display:none;border-color:rgba(136,153,255,0.15);background:rgba(136,153,255,0.04)">
-          <div class="breakdown-row"><span>Potential Profit</span><span id="rr-r-profit" style="color:#00ff88">—</span></div>
-          <div class="breakdown-row"><span>Potential Loss</span><span id="rr-r-loss" style="color:#ff3366">—</span></div>
+          <div class="breakdown-row"><span>Potential Profit</span><span id="rr-r-profit" style="color:#00ff88">-</span></div>
+          <div class="breakdown-row"><span>Potential Loss</span><span id="rr-r-loss" style="color:#ff3366">-</span></div>
           <div class="glass-divider"></div>
           <div class="field-label mt-2">RISK:REWARD RATIO</div>
-          <div class="result-val purple-col" id="rr-r-ratio">—</div>
-          <div class="text-[9px] text-textdim mt-1" id="rr-r-verdict">—</div>
+          <div class="result-val purple-col" id="rr-r-ratio">-</div>
+          <div class="text-[9px] text-textdim mt-1" id="rr-r-verdict">-</div>
         </div>
       </div>
 
@@ -636,37 +636,37 @@
           <div>
             <div class="field-label">From Currency</div>
             <select class="glass-input" id="fx-from">
-              <option value="USD" selected>USD — US Dollar</option>
-              <option value="EUR">EUR — Euro</option>
-              <option value="GBP">GBP — British Pound</option>
-              <option value="JPY">JPY — Japanese Yen</option>
-              <option value="BTC">BTC — Bitcoin</option>
-              <option value="ETH">ETH — Ethereum</option>
-              <option value="AUD">AUD — Australian Dollar</option>
-              <option value="CAD">CAD — Canadian Dollar</option>
-              <option value="CHF">CHF — Swiss Franc</option>
-              <option value="CNY">CNY — Chinese Yuan</option>
-              <option value="INR">INR — Indian Rupee</option>
-              <option value="SGD">SGD — Singapore Dollar</option>
-              <option value="BDT">BDT — Bangladesh Taka</option>
+              <option value="USD" selected>USD - US Dollar</option>
+              <option value="EUR">EUR - Euro</option>
+              <option value="GBP">GBP - British Pound</option>
+              <option value="JPY">JPY - Japanese Yen</option>
+              <option value="BTC">BTC - Bitcoin</option>
+              <option value="ETH">ETH - Ethereum</option>
+              <option value="AUD">AUD - Australian Dollar</option>
+              <option value="CAD">CAD - Canadian Dollar</option>
+              <option value="CHF">CHF - Swiss Franc</option>
+              <option value="CNY">CNY - Chinese Yuan</option>
+              <option value="INR">INR - Indian Rupee</option>
+              <option value="SGD">SGD - Singapore Dollar</option>
+              <option value="BDT">BDT - Bangladesh Taka</option>
             </select>
           </div>
           <div>
             <div class="field-label">To Currency</div>
             <select class="glass-input" id="fx-to">
-              <option value="EUR" selected>EUR — Euro</option>
-              <option value="USD">USD — US Dollar</option>
-              <option value="GBP">GBP — British Pound</option>
-              <option value="JPY">JPY — Japanese Yen</option>
-              <option value="BTC">BTC — Bitcoin</option>
-              <option value="ETH">ETH — Ethereum</option>
-              <option value="AUD">AUD — Australian Dollar</option>
-              <option value="CAD">CAD — Canadian Dollar</option>
-              <option value="CHF">CHF — Swiss Franc</option>
-              <option value="CNY">CNY — Chinese Yuan</option>
-              <option value="INR">INR — Indian Rupee</option>
-              <option value="SGD">SGD — Singapore Dollar</option>
-              <option value="BDT">BDT — Bangladesh Taka</option>
+              <option value="EUR" selected>EUR - Euro</option>
+              <option value="USD">USD - US Dollar</option>
+              <option value="GBP">GBP - British Pound</option>
+              <option value="JPY">JPY - Japanese Yen</option>
+              <option value="BTC">BTC - Bitcoin</option>
+              <option value="ETH">ETH - Ethereum</option>
+              <option value="AUD">AUD - Australian Dollar</option>
+              <option value="CAD">CAD - Canadian Dollar</option>
+              <option value="CHF">CHF - Swiss Franc</option>
+              <option value="CNY">CNY - Chinese Yuan</option>
+              <option value="INR">INR - Indian Rupee</option>
+              <option value="SGD">SGD - Singapore Dollar</option>
+              <option value="BDT">BDT - Bangladesh Taka</option>
             </select>
           </div>
         </div>
@@ -674,10 +674,10 @@
         <button class="calc-btn w-full mt-4" onclick="calcFX()">CONVERT</button>
 
         <div class="result-box" id="fx-result" style="display:none;">
-          <div class="breakdown-row"><span id="fx-r-rate-label">Rate</span><span id="fx-r-rate">—</span></div>
+          <div class="breakdown-row"><span id="fx-r-rate-label">Rate</span><span id="fx-r-rate">-</span></div>
           <div class="glass-divider"></div>
           <div class="field-label mt-2">CONVERTED AMOUNT</div>
-          <div class="result-val" id="fx-r-total" style="color:#00d4ff">—</div>
+          <div class="result-val" id="fx-r-total" style="color:#00d4ff">-</div>
           <div class="text-[9px] text-textdim mt-1" id="fx-r-note">Based on indicative rates</div>
         </div>
       </div>
@@ -727,13 +727,13 @@
         <button class="calc-btn gold w-full mt-4" onclick="calcDCA()">SIMULATE DCA</button>
 
         <div class="result-box" id="dca-result" style="display:none;border-color:rgba(255,184,0,0.15);background:rgba(255,184,0,0.04)">
-          <div class="breakdown-row"><span>Total Invested</span><span id="dca-r-invested">—</span></div>
-          <div class="breakdown-row"><span>Avg Cost Basis</span><span id="dca-r-avg">—</span></div>
-          <div class="breakdown-row"><span>Unrealized P/L</span><span id="dca-r-pnl">—</span></div>
+          <div class="breakdown-row"><span>Total Invested</span><span id="dca-r-invested">-</span></div>
+          <div class="breakdown-row"><span>Avg Cost Basis</span><span id="dca-r-avg">-</span></div>
+          <div class="breakdown-row"><span>Unrealized P/L</span><span id="dca-r-pnl">-</span></div>
           <div class="glass-divider"></div>
           <div class="field-label mt-2">PORTFOLIO VALUE</div>
-          <div class="result-val gold-col" id="dca-r-value">—</div>
-          <div class="text-[9px] text-textdim mt-1" id="dca-r-note">—</div>
+          <div class="result-val gold-col" id="dca-r-value">-</div>
+          <div class="text-[9px] text-textdim mt-1" id="dca-r-note">-</div>
         </div>
       </div>
 
@@ -772,13 +772,13 @@
         <button class="calc-btn gain w-full mt-4" onclick="calcPNL()">CALCULATE P&L</button>
 
         <div class="result-box" id="pnl-result" style="display:none;border-color:rgba(0,255,136,0.15);background:rgba(0,255,136,0.04)">
-          <div class="breakdown-row"><span>Gross P/L</span><span id="pnl-r-gross">—</span></div>
-          <div class="breakdown-row"><span>Total Fees</span><span id="pnl-r-fees" style="color:#ff3366">—</span></div>
-          <div class="breakdown-row"><span>Net P/L</span><span id="pnl-r-net" style="font-weight:800">—</span></div>
+          <div class="breakdown-row"><span>Gross P/L</span><span id="pnl-r-gross">-</span></div>
+          <div class="breakdown-row"><span>Total Fees</span><span id="pnl-r-fees" style="color:#ff3366">-</span></div>
+          <div class="breakdown-row"><span>Net P/L</span><span id="pnl-r-net" style="font-weight:800">-</span></div>
           <div class="glass-divider"></div>
           <div class="field-label mt-2">NET RETURN</div>
-          <div class="result-val" id="pnl-r-pct">—</div>
-          <div class="text-[9px] text-textdim mt-1" id="pnl-r-note">—</div>
+          <div class="result-val" id="pnl-r-pct">-</div>
+          <div class="text-[9px] text-textdim mt-1" id="pnl-r-note">-</div>
         </div>
       </div>
 
@@ -817,12 +817,12 @@
         <button class="calc-btn purple w-full mt-4" onclick="calcBE()">CALCULATE BREAK-EVEN</button>
 
         <div class="result-box" id="be-result" style="display:none;border-color:rgba(136,153,255,0.15);background:rgba(136,153,255,0.04)">
-          <div class="breakdown-row"><span>Contribution Margin</span><span id="be-r-cm">—</span></div>
-          <div class="breakdown-row"><span>CM Ratio</span><span id="be-r-cmr">—</span></div>
+          <div class="breakdown-row"><span>Contribution Margin</span><span id="be-r-cm">-</span></div>
+          <div class="breakdown-row"><span>CM Ratio</span><span id="be-r-cmr">-</span></div>
           <div class="glass-divider"></div>
           <div class="field-label mt-2">BREAK-EVEN UNITS</div>
-          <div class="result-val purple-col" id="be-r-units">—</div>
-          <div class="text-[9px] text-textdim mt-1" id="be-r-note">—</div>
+          <div class="result-val purple-col" id="be-r-units">-</div>
+          <div class="text-[9px] text-textdim mt-1" id="be-r-note">-</div>
         </div>
       </div>
 
@@ -840,7 +840,7 @@
   <script>
   // ── CLOCK ──────────────────────────────────────────────────────
   function updateClock(){
-    document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'UTC'})+' UTC';
+    document.getElementById('clock').textContent=new Date().toLocaleTimeString([],{hour12:false,timeZoneName:'short'});
   }
   updateClock(); setInterval(updateClock,1000);
 
@@ -964,10 +964,10 @@
     set('rr-r-loss', '-'+fmtRaw(lossPct,2)+'% ('+fmt(loss)+')');
     set('rr-r-ratio', '1 : '+fmtRaw(ratio,2));
     let verdict='';
-    if(ratio>=3) verdict='✓ Excellent ratio — high probability setup';
-    else if(ratio>=2) verdict='✓ Good ratio — acceptable risk';
-    else if(ratio>=1) verdict='⚠ Marginal — consider adjusting targets';
-    else verdict='✗ Poor ratio — risk exceeds reward';
+    if(ratio>=3) verdict='✓ Excellent ratio - high probability setup';
+    else if(ratio>=2) verdict='✓ Good ratio - acceptable risk';
+    else if(ratio>=1) verdict='⚠ Marginal - consider adjusting targets';
+    else verdict='✗ Poor ratio - risk exceeds reward';
     set('rr-r-verdict', verdict);
     document.getElementById('rr-r-ratio').style.color = ratio>=2?'#8899ff':ratio>=1?'#ffb800':'#ff3366';
     show('rr-result');

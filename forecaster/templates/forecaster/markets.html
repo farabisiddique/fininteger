@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fininteger — Markets Overview</title>
+  <title>fininteger - Markets Overview</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <script>
@@ -73,6 +73,11 @@
     .nav-link { font-size:12px; color:#8ab0cc; letter-spacing:0.06em; text-decoration:none; transition:color .15s; font-family:'JetBrains Mono',monospace; font-weight:500; }
     .nav-link:hover, .nav-link.active { color:#00d4ff; }
     .nav-link.active { font-weight:700; }
+    .help-q { display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px;
+              border:1px solid #1a3a5c; border-radius:50%; font-size:9px; color:#4a7090; margin-left:6px;
+              cursor:help; vertical-align:middle; }
+    .help-q:hover { color:#00d4ff; border-color:#00d4ff; }
+
     /* LIGHT MODE (invert + hue-rotate keeps brand hues; images counter-inverted) */
     html.light-mode { filter: invert(1) hue-rotate(180deg); background:#fbfbfd; }
     html.light-mode img { filter: invert(1) hue-rotate(180deg); }
@@ -95,7 +100,7 @@
   <header class="flex items-center justify-between px-6 h-[64px] border-b border-border shrink-0 sticky top-0 z-50"
           style="background:rgba(5,10,14,0.92);backdrop-filter:blur(20px);">
     <div class="flex items-center gap-3">
-      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger — home" style="height:46px;width:auto;border-radius:8px;"></a>
+      <a href="/" style="display:flex;align-items:center;" title="Home"><img id="brand-logo" src="/static/images/lockup-navy.png" alt="fininteger - home" style="height:46px;width:auto;border-radius:8px;"></a>
       <span class="text-[11px] text-textdim border-l border-border pl-3 tracking-[0.1em]">AI Based Financial Adviser</span>
     </div>
     <nav class="flex items-center gap-6">
@@ -146,7 +151,7 @@
     <!-- PAGE HEADER -->
     <div class="flex items-end justify-between">
       <div>
-        <div class="text-[9px] text-textdim tracking-[0.2em] mb-2">🌐 GLOBAL OVERVIEW</div>
+        <div class="text-[9px] text-textdim tracking-[0.2em] mb-2">GLOBAL OVERVIEW</div>
         <h1 class="font-display font-extrabold text-[28px] text-textb tracking-[-0.02em] leading-none">Markets</h1>
         <p class="text-[11px] text-textdim mt-1.5">Real-time snapshot across all asset classes</p>
       </div>
@@ -164,42 +169,42 @@
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="stats-row">
       <div class="stat-card fadein">
         <div class="stat-label">Market Gainers</div>
-        <div class="stat-val text-gain" id="st-gainers">—</div>
-        <div class="text-[9px] text-textdim mt-1" id="st-gainers-pct">—</div>
+        <div class="stat-val text-gain" id="st-gainers">-</div>
+        <div class="text-[9px] text-textdim mt-1" id="st-gainers-pct">-</div>
       </div>
       <div class="stat-card fadein">
         <div class="stat-label">Market Losers</div>
-        <div class="stat-val text-loss" id="st-losers">—</div>
-        <div class="text-[9px] text-textdim mt-1" id="st-losers-pct">—</div>
+        <div class="stat-val text-loss" id="st-losers">-</div>
+        <div class="text-[9px] text-textdim mt-1" id="st-losers-pct">-</div>
       </div>
       <div class="stat-card fadein">
         <div class="stat-label">Avg 24H Change</div>
-        <div class="stat-val" id="st-avg-chg">—</div>
+        <div class="stat-val" id="st-avg-chg">-</div>
         <div class="text-[9px] text-textdim mt-1">across all instruments</div>
       </div>
       <div class="stat-card fadein">
         <div class="stat-label">Top Mover</div>
-        <div class="stat-val text-textb" id="st-top-mover">—</div>
-        <div class="text-[9px] mt-1" id="st-top-mover-chg">—</div>
+        <div class="stat-val text-textb" id="st-top-mover">-</div>
+        <div class="text-[9px] mt-1" id="st-top-mover-chg">-</div>
       </div>
     </div>
 
     <!-- MARKET LISTS: TRENDING / GAINERS / LOSERS / CHEAP (min 10 each, follow category filter) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5" id="market-lists">
       <div class="card fadein">
-        <div class="mlist-header"><span>🔥 TRENDING</span><span class="mlist-badge" id="cnt-trending"></span></div>
+        <div class="mlist-header"><span>TRENDING<span class="help-q" title="Instruments with the biggest 24h price moves in either direction.">?</span></span><span class="mlist-badge" id="cnt-trending"></span></div>
         <div id="list-trending" class="px-4 pb-4"></div>
       </div>
       <div class="card fadein">
-        <div class="mlist-header"><span>🚀 TOP GAINERS</span><span class="mlist-badge" id="cnt-gainers"></span></div>
+        <div class="mlist-header"><span>TOP GAINERS<span class="help-q" title="Largest 24h price gains.">?</span></span><span class="mlist-badge" id="cnt-gainers"></span></div>
         <div id="list-gainers" class="px-4 pb-4"></div>
       </div>
       <div class="card fadein">
-        <div class="mlist-header"><span>📉 TOP LOSERS</span><span class="mlist-badge" id="cnt-losers"></span></div>
+        <div class="mlist-header"><span>TOP LOSERS<span class="help-q" title="Largest 24h price drops.">?</span></span><span class="mlist-badge" id="cnt-losers"></span></div>
         <div id="list-losers" class="px-4 pb-4"></div>
       </div>
       <div class="card fadein">
-        <div class="mlist-header"><span>💰 CHEAP</span><span class="mlist-badge" id="cnt-cheap"></span></div>
+        <div class="mlist-header"><span>CHEAP<span class="help-q" title="Lowest-priced instruments first.">?</span></span><span class="mlist-badge" id="cnt-cheap"></span></div>
         <div id="list-cheap" class="px-4 pb-4"></div>
       </div>
     </div>
@@ -237,7 +242,7 @@
 
         <!-- MARKET SENTIMENT -->
         <div class="card fadein">
-          <div class="card-header pb-3">📊 MARKET SENTIMENT</div>
+          <div class="card-header pb-3">MARKET SENTIMENT</div>
           <div class="p-4">
             <div id="sentiment-bars"></div>
           </div>
@@ -252,7 +257,7 @@
   const INSTRUMENTS = {{ instruments_json|safe }};
 
   // Clock
-  function updateClock(){ document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'UTC'})+' UTC'; }
+  function updateClock(){ document.getElementById('clock').textContent=new Date().toLocaleTimeString([],{hour12:false,timeZoneName:'short'}); }
   updateClock(); setInterval(updateClock,1000);
 
   // Ticker
@@ -440,6 +445,28 @@
   });
 
   renderTable(); renderStats(); renderHeatmap(); renderLists(); renderSentiment();
+
+  // ── LIVE PRICE + 24H CHANGE REFRESH (server caches quotes for 60s) ──
+  function refreshMarketsPrices(){
+    let done = 0;
+    INSTRUMENTS.forEach(async inst => {
+      try {
+        const r = await fetch(`/api/price/${inst.id}/`);
+        const d = await r.json();
+        if (d.price) {
+          inst.price = d.price;
+          if (typeof d.change === 'number') inst.change = d.change;
+        }
+      } catch(e) { /* silent fail */ }
+      finally {
+        if (++done === INSTRUMENTS.length) {
+          renderTable(); renderStats(); renderHeatmap(); renderLists(); renderSentiment(); buildTicker();
+        }
+      }
+    });
+  }
+  refreshMarketsPrices();
+  setInterval(refreshMarketsPrices, 60 * 1000);
   </script>
 </body>
 </html>

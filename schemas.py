@@ -3,7 +3,7 @@ Pydantic schemas for FastAPI request/response validation.
 """
 
 from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
 from datetime import datetime
 
 
@@ -43,7 +43,7 @@ class ForecastData(BaseModel):
 
 
 class Candle(BaseModel):
-    time: str
+    time: Union[int, str]  # epoch seconds (intraday) or "YYYY-MM-DD" (daily)
     open: float
     high: float
     low: float
@@ -65,6 +65,7 @@ class InstrumentsListResponse(BaseModel):
 class PriceResponse(BaseModel):
     symbol: str
     price: float
+    change: Optional[float] = None  # 24h % change vs previous close
 
 
 class CategoryResponse(BaseModel):
